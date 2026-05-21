@@ -7,7 +7,7 @@ import Spinner from '../../components/common/Spinner';
 import { Link } from 'react-router-dom';
 import { Plus, Edit2, Trash2, ShieldCheck, X, Image, AlertCircle, RefreshCw } from 'lucide-react';
 
-const CATEGORIES = ['Laptops', 'Smartphones', 'Audio', 'Accesorios', 'Dispositivos Inteligentes', 'Vestimenta'];
+const CATEGORIES = ['Laptops', 'Smartphones', 'Audio', 'Accesorios', 'Dispositivos Inteligentes', 'Vestimenta', 'Zapatillas', 'Ropa'];
 
 export const ProductsCrud: React.FC = () => {
   const { products, loading, error, refreshCatalog, totalProducts } = useProducts();

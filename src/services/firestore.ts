@@ -13,10 +13,77 @@ import {
   orderBy,
   startAfter,
   Timestamp,
-  writeBatch
+  writeBatch,
+  type FirestoreDataConverter,
+  type QueryDocumentSnapshot,
+  type SnapshotOptions,
+  type DocumentData
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { Product, Order, Review, CartItem, OrderStatus } from '../types';
+
+export const productConverter: FirestoreDataConverter<Product> = {
+  toFirestore(product: Product): DocumentData {
+    let dbCategory = product.category;
+    let dbCategoryId = product.category;
+
+    if (product.category === 'Zapatillas') {
+      dbCategory = 'shoes';
+      dbCategoryId = 'shoes';
+    } else if (product.category === 'Ropa') {
+      dbCategory = 'clothing';
+      dbCategoryId = 'clothing';
+    } else if (product.category === 'Accesorios') {
+      dbCategory = 'accessories';
+      dbCategoryId = 'accessories';
+    }
+
+    return {
+      name: product.name,
+      nameLower: product.name.toLowerCase(),
+      description: product.description || '',
+      price: product.price,
+      categoryId: dbCategoryId,
+      category: dbCategory,
+      image: product.imageUrl,
+      imageUrl: product.imageUrl,
+      stock: product.stock,
+      createdAt: product.createdAt,
+      averageRating: product.averageRating !== undefined ? product.averageRating : null,
+      totalReviews: product.totalReviews !== undefined ? product.totalReviews : null
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): Product {
+    const data = snapshot.data(options);
+    let category = data.category ?? data.categoryId ?? '';
+    
+    // Map database seed IDs to user-friendly Spanish names
+    if (category === 'shoes') {
+      category = 'Zapatillas';
+    } else if (category === 'clothing') {
+      category = 'Ropa';
+    } else if (category === 'accessories') {
+      category = 'Accesorios';
+    }
+
+    return {
+      id: snapshot.id,
+      name: data.name ?? '',
+      description: data.description ?? '',
+      price: Number(data.price ?? 0),
+      category: category,
+      imageUrl: data.imageUrl ?? data.image ?? '',
+      stock: data.stock !== undefined ? Number(data.stock) : 10,
+      averageRating: data.averageRating !== null && data.averageRating !== undefined ? Number(data.averageRating) : undefined,
+      totalReviews: data.totalReviews !== null && data.totalReviews !== undefined ? Number(data.totalReviews) : undefined,
+      createdAt: data.createdAt ?? new Date().toISOString()
+    };
+  }
+};
+
 
 // ==========================================================================
 // MOCK DATA PARA FALLBACK LOCAL (CYBERPUNK & TECHWEAR PRODUCTS)
@@ -234,16 +301,28 @@ export const getProducts = async (
 ): Promise<{ products: Product[]; lastDoc: any; totalCount: number }> => {
   try {
     // Intentar consulta real de Firestore
-    const productsRef = collection(db, 'products');
-    let qConstraints: any[] = [orderBy('createdAt', 'desc')];
+    const productsRef = collection(db, 'products').withConverter(productConverter);
+    let qConstraints: any[] = [];
 
     if (category && category !== 'Todos') {
-      qConstraints.push(where('category', '==', category));
+      let dbCategory = category;
+      if (category === 'Zapatillas') dbCategory = 'shoes';
+      if (category === 'Ropa') dbCategory = 'clothing';
+      if (category === 'Accesorios') dbCategory = 'accessories';
+
+      const isSeedCategory = dbCategory === 'shoes' || dbCategory === 'clothing' || dbCategory === 'accessories';
+      const categoryField = isSeedCategory ? 'categoryId' : 'category';
+      qConstraints.push(where(categoryField, '==', dbCategory));
     }
 
-    // Nota: La búsqueda semántica y de texto completo con 'where' no se apoya nativamente en Firestore sin indexadores externos.
-    // Realizamos un filtro post-carga o por prefijos en producción.
-    // Para admitir debouncing y búsquedas rápidas, en Firestore aplicamos paginación base.
+    if (search && search.trim()) {
+      const searchPrefix = search.toLowerCase().trim();
+      qConstraints.push(where('nameLower', '>=', searchPrefix));
+      qConstraints.push(where('nameLower', '<=', searchPrefix + '\uf8ff'));
+      qConstraints.push(orderBy('nameLower', 'asc'));
+    } else {
+      qConstraints.push(orderBy('createdAt', 'desc'));
+    }
     
     if (lastVisible) {
       qConstraints.push(startAfter(lastVisible));
@@ -251,15 +330,36 @@ export const getProducts = async (
     
     qConstraints.push(limit(limitCount));
 
-    const q = query(productsRef, ...qConstraints);
-    const querySnapshot = await getDocs(q);
-    
-    let productsList: Product[] = [];
-    querySnapshot.forEach((docSnap) => {
-      productsList.push({ id: docSnap.id, ...docSnap.data() } as Product);
-    });
+    let querySnapshot;
+    try {
+      const q = query(productsRef, ...qConstraints);
+      querySnapshot = await getDocs(q);
+    } catch (indexError) {
+      console.warn('getProducts - Firestore index missing or query failed, trying client fallback query:', indexError);
+      
+      const fallbackConstraints: any[] = [orderBy('createdAt', 'desc')];
+      if (category && category !== 'Todos') {
+        let dbCategory = category;
+        if (category === 'Zapatillas') dbCategory = 'shoes';
+        if (category === 'Ropa') dbCategory = 'clothing';
+        if (category === 'Accesorios') dbCategory = 'accessories';
 
-    // Filtro cliente para la búsqueda por texto si está presente
+        const isSeedCategory = dbCategory === 'shoes' || dbCategory === 'clothing' || dbCategory === 'accessories';
+        const categoryField = isSeedCategory ? 'categoryId' : 'category';
+        fallbackConstraints.push(where(categoryField, '==', dbCategory));
+      }
+      if (lastVisible) {
+        fallbackConstraints.push(startAfter(lastVisible));
+      }
+      fallbackConstraints.push(limit(limitCount * 2));
+      
+      const qFallback = query(productsRef, ...fallbackConstraints);
+      querySnapshot = await getDocs(qFallback);
+    }
+    
+    let productsList: Product[] = querySnapshot.docs.map(docSnap => docSnap.data());
+
+    // Filtro cliente para la búsqueda por texto si está presente y falló o requiere más precisión
     if (search) {
       const normalizedSearch = search.toLowerCase().trim();
       productsList = productsList.filter(p => 
@@ -309,10 +409,10 @@ export const getProducts = async (
 
 export const getProductById = async (id: string): Promise<Product | null> => {
   try {
-    const docRef = doc(db, 'products', id);
+    const docRef = doc(db, 'products', id).withConverter(productConverter);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as Product;
+      return docSnap.data();
     }
     return null;
   } catch (error) {

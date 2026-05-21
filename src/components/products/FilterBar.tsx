@@ -10,6 +10,8 @@ const CATEGORIES = [
   { name: 'Audio', icon: Headphones },
   { name: 'Accesorios', icon: Tag },
   { name: 'Dispositivos Inteligentes', icon: Laptop },
+  { name: 'Zapatillas', icon: Tag },
+  { name: 'Ropa', icon: Tag },
   { name: 'Vestimenta', icon: Tag }
 ];
 

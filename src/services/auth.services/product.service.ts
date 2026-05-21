@@ -7,60 +7,45 @@ import {
   getDocs,
   orderBy,
   query,
-  QueryDocumentSnapshot,
   updateDoc,
   where,
-  type DocumentData,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { productConverter } from "../firestore";
 import type { Product } from "../../types";
 
 //* Obtener todos los productos:
 export const getProducts = async (): Promise<Product[]> => {
-  const snapshot = await getDocs(collection(db, "products"));
-  return snapshot.docs.map(mapProduct);
+  const snapshot = await getDocs(
+    collection(db, "products").withConverter(productConverter)
+  );
+  return snapshot.docs.map((doc) => doc.data());
 };
 
 //* Obtener un producto por ID:
 export const getProductById = async (id: string): Promise<Product | null> => {
-  const ref = doc(db, "products", id);
+  const ref = doc(db, "products", id).withConverter(productConverter);
   const snapshot = await getDoc(ref);
 
   if (!snapshot.exists()) return null;
 
-  const data = snapshot.data() as unknown as Omit<Product, "id">;
-
-  return {
-    id: snapshot.id,
-    ...data,
-  } as Product;
+  return snapshot.data();
 };
 
 //* Crear un nuevo producto:
 type NewProduct = Omit<Product, "id">;
-// const newProduct = {
-//   name: "Teclado Mecánico",
-//   price: 150,
-//   category: "peripherals",
-//   stock: 5
-// };
 
 export const addProduct = async (product: NewProduct): Promise<string> => {
-  const docRef = await addDoc(collection(db, "products"), product);
+  // We cast to Product for the converter (id will be omitted in toFirestore)
+  const productWithPlaceholderId = { id: "", ...product } as Product;
+  const docRef = await addDoc(
+    collection(db, "products").withConverter(productConverter),
+    productWithPlaceholderId
+  );
   return docRef.id;
 };
 
 //* Obtener productos por categoría ordenados por precio:
-//* Mapper reutilizable
-const mapProduct = (doc: QueryDocumentSnapshot<DocumentData>): Product => {
-  const data = doc.data() as unknown as Omit<Product, "id">;
-
-  return {
-    id: doc.id,
-    ...data,
-  } as Product;
-};
-
 export const getProductsByCategory = async (
   category: string,
 ): Promise<Product[]> => {
@@ -70,20 +55,27 @@ export const getProductsByCategory = async (
       return [];
     }
 
-    const productsRef = collection(db, "products");
+    let dbCategory = category;
+    if (category === 'Zapatillas') dbCategory = 'shoes';
+    if (category === 'Ropa') dbCategory = 'clothing';
+    if (category === 'Accesorios') dbCategory = 'accessories';
+
+    const isSeedCategory = dbCategory === 'shoes' || dbCategory === 'clothing' || dbCategory === 'accessories';
+    const categoryField = isSeedCategory ? 'categoryId' : 'category';
+
+    const productsRef = collection(db, "products").withConverter(productConverter);
 
     const productsQuery = query(
       productsRef,
-      where("category", "==", category),
+      where(categoryField, "==", dbCategory),
       orderBy("price", "asc"),
     );
 
     const snapshot = await getDocs(productsQuery);
 
-    return snapshot.docs.map(mapProduct);
+    return snapshot.docs.map((doc) => doc.data());
   } catch (error) {
     console.error("[getProductsByCategory] Error fetching products:", error);
-
     throw new Error("Failed to fetch products by category");
   }
 };
@@ -104,23 +96,3 @@ export const deleteProduct = async (id: string): Promise<void> => {
   const ref = doc(db, "products", id);
   await deleteDoc(ref);
 };
-
-// export const getProductsByCategory = async (
-//   category: string,
-// ): Promise<Product[]> => {
-//   const q = query(
-//     collection(db, "products"),
-//     where("category", "==", category),
-//     orderBy("price", "asc"),
-//   );
-
-//   const snapshot = await getDocs(q);
-
-//   return snapshot.docs.map(
-//     (doc) =>
-//       ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }) as Product,
-//   );
-// };

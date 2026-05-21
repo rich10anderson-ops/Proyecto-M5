@@ -1,8 +1,15 @@
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { auth } from "../services/firebase";
+import { auth, db } from "../services/firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { AuthContext } from "../contexts/AuthContext";
-import { getUserProfile, loginService, logoutService, signupService } from "../services/auth.services/auth.service";
+import {
+  getUserProfile,
+  loginService,
+  logoutService,
+  signupService,
+  loginWithGoogleService,
+} from "../services/auth.services/auth.service";
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +33,27 @@ export const AuthProvider = ({ children }: Props) => {
         return;
       }
       //* 2. HAY sesión:
-      const userProfile = await getUserProfile(firebaseUser.uid);
+      let userProfile = await getUserProfile(firebaseUser.uid);
+      
+      // Si el perfil no existe en Firestore (ej: primer login con Google), se crea automáticamente:
+      if (!userProfile) {
+        const isEmailAdmin = firebaseUser.email?.toLowerCase().includes("admin") ?? false;
+        const role = isEmailAdmin ? "admin" : "customer";
+        
+        await setDoc(doc(db, "users", firebaseUser.uid), {
+          email: firebaseUser.email || "",
+          role: role,
+          name: firebaseUser.displayName || "Street Explorer",
+          createdAt: new Date().toISOString(),
+        });
+        
+        userProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email || "",
+          role: role,
+        };
+      }
+
       setProfile(userProfile);
       setUser(firebaseUser);
       setLoading(false);
@@ -37,9 +64,21 @@ export const AuthProvider = ({ children }: Props) => {
   }, []);
 
   const clearError = () => setError(null);
+
   const loginWithGoogle = async () => {
-    throw new Error("loginWithGoogle no está implementado en este proveedor");
+    setLoading(true);
+    setError(null);
+    try {
+      await loginWithGoogleService();
+    } catch (err: any) {
+      console.error(err);
+      const errorMsg = "Error al iniciar sesión con Google.";
+      setError(errorMsg);
+      setLoading(false);
+      throw new Error(errorMsg);
+    }
   };
+
   const switchToMockMode = () => {
     setIsMock(true);
   };

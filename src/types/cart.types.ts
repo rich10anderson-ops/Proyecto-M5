@@ -15,7 +15,7 @@ export type CartAction =
     }
   | {
       type: "REMOVE_ITEM";
-      payload: number;
+      payload: string;
     }
   | {
       type: "CLEAR_CART";

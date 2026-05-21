@@ -2,10 +2,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { type AuthUser } from "../../types";
+
+export const loginWithGoogleService = async () => {
+  const provider = new GoogleAuthProvider();
+  const credentials = await signInWithPopup(auth, provider);
+  return credentials.user;
+};
 
 export const loginService = async (email: string, password: string) => {
   await signInWithEmailAndPassword(auth, email, password);

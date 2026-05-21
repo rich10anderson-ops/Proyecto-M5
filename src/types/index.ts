@@ -1,3 +1,5 @@
+import { Product } from "./product";
+
 export type UserRole = 'customer' | 'admin'|'invitado';
 
 export type AuthUser = {
@@ -14,18 +16,7 @@ export interface UserProfile {
   createdAt: string;
 }
 
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  stock: number;
-  averageRating?: number;
-  totalReviews?: number;
-  createdAt: string;
-}
+export * from "./product";
 
 export interface CartItem {
   product: Product;

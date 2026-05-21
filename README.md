@@ -2,7 +2,45 @@
 
 Bienvenido a **NEON TECH**, una Single Page Application (SPA) premium de comercio electrónico que fusiona la cultura urbana techwear con una estética futurista **Street Neon / Cyberpunk**. La aplicación está construida sobre una arquitectura modular de alto rendimiento y cuenta con interacciones de usuario ultra-reactivas, gestión del estado sincronizada en la nube y un panel de administración robusto con analíticas integradas.
 
-Desarrollada para ofrecer una experiencia móvil-first premium, esta SPA combina **React 18**, **TypeScript**, **Vite**, **Tailwind CSS v3**, **Firebase v12 (Auth & Firestore)** y **AWS S3** para la gestión en la nube.
+Desarrollada para ofrecer una experiencia móvil-first premium, esta SPA combina **React 19**, **TypeScript 6**, **Vite 8**, **Tailwind CSS v3**, **Firebase v12 (Auth & Firestore)** y **AWS S3** para la gestión en la nube.
+
+---
+
+## 📊 Especificación de Versiones y Dependencias
+
+A continuación se detalla la suite tecnológica integrada en el proyecto, adaptada para cumplir con la compatibilidad de **React 19** y soporte del entorno serverless **Vercel / AWS SDK**:
+
+| Categoría | Módulo / Paquete | Versión de Producción | Propósito Arquitectónico | Estado de Integración |
+| :--- | :--- | :---: | :--- | :---: |
+| **Core** | `react` | `^19.2.6` | Biblioteca principal para la construcción de interfaces ultra-reactivas | **Activo** |
+| **Core** | `react-dom` | `^19.2.6` | Renderizador del DOM adaptado al nuevo modelo de concurrencia de React 19 | **Activo** |
+| **Navegación** | `react-router-dom`| `^7.15.1` | Manejador de enrutamiento modular y protección de rutas privadas de administrador | **Activo** |
+| **Servicios Nube** | `firebase` | `^12.13.0` | Suite de Base de Datos (Firestore) y Autenticación segura en tiempo real | **Activo** |
+| **Servidores** | `@vercel/node` | `^5.8.2` | Soporte tipado de TypeScript para funciones serverless en Vercel | **Activo** |
+| **Almacenamiento**| `@aws-sdk/client-s3`| `^3.1049.0` | SDK de AWS para operaciones de creación y subida de archivos | **Activo** |
+| **Almacenamiento**| `@aws-sdk/s3-request-presigner` | `^3.1049.0` | Generador de URLs firmadas temporalmente (*Presigned URLs*) para cargas seguras | **Activo** |
+| **Estilos** | `tailwindcss` | `^3.4.17` | Framework de CSS utilitario para diseño visual cyberpunk responsivo | **Activo** |
+| **Estilos** | `postcss` / `autoprefixer` | `^8.4.49` / `^10.4.20` | Suite de preprocesamiento de estilos CSS y soporte multiplataforma | **Activo** |
+| **Componentes** | `lucide-react` / `recharts` | `^1.16.0` / `^3.8.1` | Set de iconos vectoriales interactivos y gráficas para el dashboard del admin | **Activo** |
+| **Compilación** | `vite` | `^8.0.12` | Entorno de construcción rápido y empaquetador para producción | **Activo** |
+| **Tipado** | `typescript` | `~6.0.2` | Compilador estricto para type-safety de extremo a extremo | **Activo** |
+
+---
+
+## 🛠️ Tabla de Mejoras Arquitectónicas y Refactorizaciones Realizadas
+
+Hemos ejecutado un plan de refactorización integral sobre el núcleo del proyecto para elevar la seguridad de tipado, eliminar mappers inseguros y unificar el catálogo entre las pruebas simuladas y los datos de Firebase.
+
+| Componente | Archivos Modificados / Nuevos | Tipo de Mejora | Detalle del Cambio Técnico | Beneficio e Impacto |
+| :--- | :--- | :---: | :--- | :--- |
+| **Tipos Centrales** | [product.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/types/product.ts)<br/>[index.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/types/index.ts) | **Unificación de Tipado** | Se consolidó la interfaz única `Product` con tipos estrictos, eliminando duplicados dispersos y estandarizando los campos de metadata (`stock`, `createdAt`, `averageRating`, `totalReviews`). | Evita errores de consistencia en el compilador y garantiza que todas las capas consuman la misma estructura de datos. |
+| **Contrato de Carrito** | [cart.types.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/types/cart.types.ts)<br/>[cart.context.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/types/cart.context.ts) | **Corrección de Mismatch** | Se cambió la firma del identificador del producto en funciones de eliminación (`removeItem`) de `number` a `string` para alinearse con los IDs autogenerados de Firestore. | Previene colisiones de tipos al intentar remover elementos y permite sincronizar el carrito web en tiempo real. |
+| **Mapeador Seguro** | [firestore.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/firestore.ts) | **Firestore Data Converter** | Implementación del `productConverter` (`FirestoreDataConverter<Product>`). Elimina por completo los castings inseguros del tipo `as Product` o `any`. | Asegura que los datos provenientes de la nube cumplan con la interfaz del cliente, asignando valores fallback válidos y seguros si hay propiedades nulas. |
+| **Traductor de Semilla**| [firestore.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/firestore.ts)<br/>[product.service.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/auth.services/product.service.ts) | **Adaptabilidad de Categorías** | El converter traduce de forma bidireccional y transparente las categorías del seed en inglés (`shoes`, `clothing`, `accessories`) a las amigables en español (`Zapatillas`, `Ropa`, `Accesorios`). | Permite sembrar la base de datos de forma estándar y renderizar un menú de navegación visualmente coherente en el cliente. |
+| **Búsqueda Indexada** | [firestore.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/firestore.ts) | **Optimización de Consultas** | Se implementaron búsquedas por prefijo de texto usando rangos ordenados (`>= nameLower` y `<= nameLower + \uf8ff`). Se añadió un **fallback dinámico** automático en cliente para evitar caídas si los índices compuestos no están creados en Firebase Console. | Garantiza búsquedas instantáneas y fluidas de productos de tecnología/streetwear directamente desde Firestore con máxima tolerancia a fallos. |
+| **Google Sign-In** | [auth.service.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/auth.services/auth.service.ts)<br/>[AuthProvider.tsx](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/providers/AuthProvider.tsx) | **Registro Automatizado** | Integración de inicio de sesión con Google usando `GoogleAuthProvider` y `signInWithPopup`. Se acopló en `onAuthStateChanged` para detectar nuevos ingresos y crear automáticamente su perfil de usuario en la colección `/users` de Firestore. | Ofrece una experiencia de registro en 1-click rápida para el cliente final y centraliza los perfiles de usuario de forma transparente. |
+| **Carga Segura de Multimedia** | [presign.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/api/presign.ts) | **Serverless Presigned URLs** | Creación de una API Serverless que genera URLs temporales autorizadas para subidas directas a un bucket de AWS S3 privado, protegiendo las credenciales secretas de AWS en el servidor. | Permite que el Panel de Administración CRUD de productos suba imágenes de alta definición directamente a S3 sin exponer claves de acceso del frontend. |
+| **Soporte de Semillero** | [seed.js](file:///C:/Users/richa/Documents/proyect/proyecto-m5/seed.js) | **Base de Datos Inicial** | Creación de un script autónomo de sembrado que conecta con la base de datos Firestore y carga automáticamente el catálogo centralizado de Streetwear y Calzado Tecnológico. | Facilita la inicialización del entorno de pruebas o producción en segundos, poblando la interfaz de usuario de inmediato. |
 
 ---
 
@@ -99,9 +137,8 @@ cd proyecto-m5
 ```
 
 ### 2. Instalar dependencias
-Se recomienda utilizar Node v18+ y npm v9+:
 ```bash
-npm install
+npm.cmd install
 ```
 
 ### 3. Configurar variables de entorno
@@ -110,23 +147,23 @@ Copia el archivo de ejemplo y rellena tus datos (o déjalos vacíos para usar lo
 cp .env.example .env
 ```
 
-### 4. Iniciar servidor de desarrollo local
+### 4. Sembrado de la Base de Datos (Opcional)
+Si deseas poblar tu base de datos Firestore en tiempo real con el catálogo oficial de calzado y vestimenta streetwear, ejecuta el siguiente comando:
+```bash
+node seed.js
+```
+
+### 5. Iniciar servidor de desarrollo local
 Ejecuta la terminal de Vite:
 ```bash
-npm run dev
+npm.cmd run dev
 ```
 Abre tu navegador en `http://localhost:5173`.
-
-### 5. Ejecutar la Suite de Pruebas (Vitest)
-Nuestra suite de tests valida hooks, reducers y componentes críticos con un 100% de éxito:
-```bash
-npm run test   # O directamete: npx vitest run
-```
 
 ### 6. Compilar para producción
 Para compilar y validar que el tipado estricto de TypeScript se cumpla al 100%:
 ```bash
-npm run build
+npm.cmd run build
 ```
 
 ---
