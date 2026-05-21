@@ -1,4 +1,10 @@
-export type UserRole = 'customer' | 'admin';
+export type UserRole = 'customer' | 'admin'|'invitado';
+
+export type AuthUser = {
+  uid: string;
+  email: string;
+  role: UserRole;
+};
 
 export interface UserProfile {
   uid: string;
