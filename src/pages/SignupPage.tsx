@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../src copy/hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 export const SignupPage = () => {
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { registerWithEmail } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +12,7 @@ export const SignupPage = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await signup(email, password);
+      await registerWithEmail(email, password, email);
       navigate("/");
     } catch (error) {
       console.error(error);
