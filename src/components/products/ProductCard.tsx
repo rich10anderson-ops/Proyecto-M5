@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Product } from '../../types';
 import RatingStars from './RatingStars';
 import { ShoppingCart, Heart, ShieldAlert } from 'lucide-react';
 import { useCart } from '../../hooks/useCart';
+import { useAuth } from '../../hooks/useAuth';
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +12,9 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { id, name, price, category, imageUrl, stock, averageRating = 5.0, totalReviews = 0 } = product;
 
   const isOutOfStock = stock <= 0;
@@ -18,6 +22,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!user) {
+      navigate('/login', { state: { from: location } });
+      return;
+    }
     if (!isOutOfStock) {
       addItem(product);
     }

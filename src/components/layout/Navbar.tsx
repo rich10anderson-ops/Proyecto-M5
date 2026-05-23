@@ -39,7 +39,7 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-6 font-mono text-[10px] uppercase tracking-wider">
-            <Link to="/" className="text-cyber-light/80 hover:text-cyber-cyan transition-colors">
+            <Link to="/products" className="text-cyber-light/80 hover:text-cyber-cyan transition-colors">
               Catálogo
             </Link>
 
@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-cyber-gray bg-cyber-card py-4 px-6 space-y-4 font-mono text-xs uppercase tracking-wider">
           <Link
-            to="/"
+            to="/products"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-cyber-light hover:text-cyber-cyan transition-colors py-1.5"
           >

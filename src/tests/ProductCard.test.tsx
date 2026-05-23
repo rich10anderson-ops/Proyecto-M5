@@ -12,6 +12,12 @@ vi.mock('../hooks/useCart', () => ({
   }),
 }));
 
+vi.mock('../hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: { uid: 'u-123', email: 'street@neon.com' },
+  }),
+}));
+
 const MOCK_PRODUCT: Product = {
   id: 'prod-test',
   name: 'CYBER-HEADPHONES // GLOW v2',

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useProducts } from '../hooks/useProducts';
-import FilterBar from '../components/products/FilterBar';
-import ProductCard from '../components/products/ProductCard';
-import Spinner from '../components/common/Spinner';
+import { useProducts } from '../../hooks/useProducts';
+import FilterBar from '../../components/products/FilterBar';
+import ProductCard from '../../components/products/ProductCard';
+import Spinner from '../../components/common/Spinner';
 import { Cpu, ShoppingBag, Eye, Heart, HelpCircle, Layers, Sparkles } from 'lucide-react';
 
 export const Home: React.FC = () => {

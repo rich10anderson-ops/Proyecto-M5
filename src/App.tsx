@@ -1,20 +1,20 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProductProvider } from './contexts/ProductContext';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/layout/Navbar';
 import CartDrawer from './components/cart/CartDrawer';
-import { ProtectedRoute, AdminRoute } from '../src/Routes/ProtectedRoutes';
+import { ProtectedRoute, AdminRoute } from './Routes/protected/ProtectedRoutes';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Pages
-import Home from './pages/Home';
+import Home from './pages/home/Home';
 import ProductDetail from './pages/products/ProductDetail';
 import Cart from './pages/cart/Cart';
 import Checkout from './pages/chekout/Checkout';
 import Profile from './pages/Profile';
-import Login from './pages/Login';
+import Login from './pages/login/Login';
 import Register from './pages/Register';
 
 // Admin Pages
@@ -66,15 +66,24 @@ function App() {
                 {/* Main Layout containing Public & Client-Protected routes */}
                 <Route path="/" element={<MainLayout />}>
                   {/* Public Store Routes */}
-                  <Route index element={<Home />} />
+                  <Route index element={<Navigate to="/products" replace />} />
+                  <Route path="products" element={<Home />} />
+                  <Route path="products/:id" element={<ProductDetail />} />
                   <Route path="product/:id" element={<ProductDetail />} />
-                  <Route path="cart" element={<Cart />} />
                   
                   {/* Auth Routes */}
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
 
                   {/* Protected Customer Routes */}
+                  <Route
+                    path="cart"
+                    element={
+                      <ProtectedRoute>
+                        <Cart />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route
                     path="checkout"
                     element={

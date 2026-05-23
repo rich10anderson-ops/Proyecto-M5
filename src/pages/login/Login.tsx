@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import { Shield, Sparkles, Terminal, Mail, Lock } from 'lucide-react';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +32,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!email || !username || !password) {
       setLocalError('Por favor completa todos los campos.');
       return;
     }
@@ -111,6 +112,25 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="cyber@neontech.com"
+                className="w-full pl-10 pr-4 py-2.5 bg-cyber-black border-2 border-cyber-gray focus:border-cyber-cyan focus:shadow-neon-cyan text-white text-sm outline-none transition-all duration-300 font-mono rounded-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs uppercase tracking-widest text-cyber-light/70 font-mono mb-2">
+              Usuario
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-cyber-cyan">
+                <Shield className="h-4 w-4" />
+              </span>
+              <input
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="cyber-rider"
                 className="w-full pl-10 pr-4 py-2.5 bg-cyber-black border-2 border-cyber-gray focus:border-cyber-cyan focus:shadow-neon-cyan text-white text-sm outline-none transition-all duration-300 font-mono rounded-none"
               />
             </div>
