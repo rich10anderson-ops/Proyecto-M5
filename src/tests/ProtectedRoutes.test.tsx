@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { ProtectedRoute, AdminRoute } from '../Routes/protected/ProtectedRoutes';
+import { ProtectedRoute, AdminRoute } from '../routes/protected/ProtectedRoutes';
 
 // Create standard mock hooks
 const mockUseAuth = vi.fn();

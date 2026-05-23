@@ -23,6 +23,15 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface OrderProductSnapshot {
+  productId: string;
+  name: string;
+  price: number;
+  category: string;
+  imageUrl: string;
+  quantity: number;
+}
+
 export interface CartState {
   items: CartItem[];
   totalAmount: number;
@@ -46,6 +55,7 @@ export interface Order {
   userEmail: string;
   userName: string;
   items: CartItem[];
+  productSnapshots?: OrderProductSnapshot[];
   total: number;
   status: OrderStatus;
   createdAt: string;

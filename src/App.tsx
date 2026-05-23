@@ -5,14 +5,14 @@ import { ProductProvider } from './contexts/ProductContext';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/layout/Navbar';
 import CartDrawer from './components/cart/CartDrawer';
-import { ProtectedRoute, AdminRoute } from './Routes/protected/ProtectedRoutes';
+import { ProtectedRoute, AdminRoute } from './routes/protected/ProtectedRoutes';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Pages
 import Home from './pages/home/Home';
 import ProductDetail from './pages/products/ProductDetail';
 import Cart from './pages/cart/Cart';
-import Checkout from './pages/chekout/Checkout';
+import Checkout from './pages/checkout/Checkout';
 import Profile from './pages/Profile';
 import Login from './pages/login/Login';
 import Register from './pages/Register';

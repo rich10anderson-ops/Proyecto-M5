@@ -20,7 +20,7 @@ import {
   type DocumentData
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Product, Order, Review, CartItem, OrderStatus } from '../types';
+import { Product, Order, Review, CartItem, OrderStatus, OrderProductSnapshot } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   toFirestore(product: Product): DocumentData {
@@ -476,20 +476,66 @@ export const deleteProduct = async (id: string): Promise<void> => {
 // COMENTARIOS Y RESEÑAS DE PRODUCTOS (REVIEWS)
 // ==========================================================================
 
-export const getReviews = async (productId: string): Promise<Review[]> => {
+type ReviewsPageCursor = QueryDocumentSnapshot<DocumentData> | string | null;
+
+export interface ReviewsPage {
+  reviews: Review[];
+  lastDoc: ReviewsPageCursor;
+  hasMore: boolean;
+}
+
+const buildOrderProductSnapshots = (items: CartItem[]): OrderProductSnapshot[] => {
+  return items.map(({ product, quantity }) => ({
+    productId: product.id,
+    name: product.name,
+    price: product.price,
+    category: product.category,
+    imageUrl: product.imageUrl,
+    quantity,
+  }));
+};
+
+export const getReviewsPage = async (
+  productId: string,
+  limitCount: number = 5,
+  lastVisible?: ReviewsPageCursor
+): Promise<ReviewsPage> => {
   try {
     const reviewsRef = collection(db, `products/${productId}/reviews`);
-    const q = query(reviewsRef, orderBy('createdAt', 'desc'));
+    const constraints: any[] = [orderBy('createdAt', 'desc')];
+    if (lastVisible && typeof lastVisible !== 'string') {
+      constraints.push(startAfter(lastVisible));
+    }
+    constraints.push(limit(limitCount + 1));
+
+    const q = query(reviewsRef, ...constraints);
     const snapshot = await getDocs(q);
-    const reviewsList: Review[] = [];
-    snapshot.forEach((d) => {
-      reviewsList.push({ id: d.id, ...d.data() } as Review);
-    });
-    return reviewsList;
+    const docs = snapshot.docs.slice(0, limitCount);
+
+    return {
+      reviews: docs.map((d) => ({ id: d.id, ...d.data() } as Review)),
+      lastDoc: docs[docs.length - 1] || null,
+      hasMore: snapshot.docs.length > limitCount,
+    };
   } catch (error) {
-    console.warn(`getReviews (${productId}) - Usando reviews locales:`, error);
-    return getLocalReviews(productId);
+    console.warn(`getReviewsPage (${productId}) - Usando reviews locales:`, error);
+    const allReviews = getLocalReviews(productId);
+    const startIndex = typeof lastVisible === 'string'
+      ? allReviews.findIndex(r => r.id === lastVisible) + 1
+      : 0;
+    const page = allReviews.slice(startIndex, startIndex + limitCount);
+
+    return {
+      reviews: page,
+      lastDoc: page.length > 0 ? page[page.length - 1].id : null,
+      hasMore: startIndex + limitCount < allReviews.length,
+    };
   }
+};
+
+export const getReviews = async (productId: string): Promise<Review[]> => {
+  const page = await getReviewsPage(productId, 5);
+  return page.reviews;
 };
 
 export const addReview = async (
@@ -548,14 +594,19 @@ export const addReview = async (
 // ==========================================================================
 
 export const createOrder = async (orderData: Omit<Order, 'id'>): Promise<string> => {
+  const orderPayload: Omit<Order, 'id'> = {
+    ...orderData,
+    productSnapshots: orderData.productSnapshots ?? buildOrderProductSnapshots(orderData.items),
+  };
+
   try {
-    const docRef = await addDoc(collection(db, 'orders'), orderData);
+    const docRef = await addDoc(collection(db, 'orders'), orderPayload);
     return docRef.id;
   } catch (error) {
     console.warn('createOrder - Creando orden en almacenamiento local:', error);
     const orders = getLocalOrders();
     const newId = `order-${Date.now()}`;
-    const newOrder: Order = { id: newId, ...orderData };
+    const newOrder: Order = { id: newId, ...orderPayload };
     orders.unshift(newOrder);
     saveLocalOrders(orders);
     return newId;

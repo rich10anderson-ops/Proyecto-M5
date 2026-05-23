@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProducts } from '../../hooks/useProducts';
 import RatingStars from './RatingStars';
-import { getReviews } from '../../services/firestore';
+import { getReviewsPage, type ReviewsPage } from '../../services/firestore';
 import { Review } from '../../types';
 import { MessageSquarePlus, MessageCircle, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -20,18 +20,26 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
   const [comment, setComment] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<boolean>(false);
+  const [lastReviewDoc, setLastReviewDoc] = useState<ReviewsPage['lastDoc']>(null);
+  const [hasMoreReviews, setHasMoreReviews] = useState(false);
+  const [loadingMoreReviews, setLoadingMoreReviews] = useState(false);
 
-  const loadReviewsList = async () => {
+  const loadReviewsList = async (reset = true) => {
     try {
-      const data = await getReviews(productId);
-      setReviews(data);
+      setLoadingMoreReviews(true);
+      const page = await getReviewsPage(productId, 5, reset ? null : lastReviewDoc);
+      setReviews(prev => reset ? page.reviews : [...prev, ...page.reviews]);
+      setLastReviewDoc(page.lastDoc);
+      setHasMoreReviews(page.hasMore);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoadingMoreReviews(false);
     }
   };
 
   useEffect(() => {
-    loadReviewsList();
+    loadReviewsList(true);
   }, [productId]);
 
   const handleSubmitReview = async (e: React.FormEvent) => {
@@ -49,7 +57,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
       setRating(5);
       setSuccessMsg(true);
       setTimeout(() => setSuccessMsg(false), 3000);
-      await loadReviewsList(); // Reload
+      await loadReviewsList(true); // Reload first page
     } catch (err: any) {
       setErrorMsg(err.message || 'Error al enviar la calificación.');
     } finally {
@@ -100,6 +108,17 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                 </p>
               </div>
             ))
+          )}
+
+          {hasMoreReviews && (
+            <button
+              type="button"
+              onClick={() => loadReviewsList(false)}
+              disabled={loadingMoreReviews}
+              className="w-full border border-cyber-cyan/40 bg-cyber-cyan/5 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-cyber-cyan transition-colors hover:bg-cyber-cyan hover:text-cyber-black disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {loadingMoreReviews ? 'Cargando reseñas...' : 'Cargar más reseñas'}
+            </button>
           )}
         </div>
 
