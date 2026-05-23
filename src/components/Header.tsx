@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 export const Header = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
 
   return (
     <header
@@ -26,7 +26,7 @@ export const Header = () => {
       ) : null}
 
       {/* Link solo para Administrador: */}
-      {user?.role === "admin" && <Link to="/admin">Admin Panel</Link>}
+      {profile?.role === "admin" && <Link to="/admin">Admin Panel</Link>}
 
       <div
         style={{

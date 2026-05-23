@@ -4,14 +4,14 @@ import { useAuth } from "../hooks/useAuth";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginWithEmail } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await login(email, password);
+      await loginWithEmail(email, password);
       navigate("/");
     } catch (error) {
       console.error(error);
