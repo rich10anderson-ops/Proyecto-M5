@@ -10,9 +10,9 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Pages
 import Home from './pages/Home';
-import ProductDetail from './pages/ProductDetail';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
+import ProductDetail from './pages/products/ProductDetail';
+import Cart from './pages/cart/Cart';
+import Checkout from './pages/chekout/Checkout';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';

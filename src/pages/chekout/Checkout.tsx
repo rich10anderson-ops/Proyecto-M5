@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
-import { useAuth } from '../hooks/useAuth';
-import { createOrder } from '../services/firestore';
-import { ShippingDetails, Order } from '../types';
-import Spinner from '../components/common/Spinner';
+import { useCart } from '../../hooks/useCart';
+import { useAuth } from '../../hooks/useAuth';
+import { createOrder } from '../../services/firestore';
+import { ShippingDetails, Order } from '../../types';
+import Spinner from '../../components/common/Spinner';
 import {
   FileText,
   Truck,

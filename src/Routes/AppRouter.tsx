@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { Dashboard } from "../pages/admin/Dashboard";
-import { Cart } from "../pages/Cart";
-import { Checkout } from "../pages/Checkout";
+import { Cart } from "../pages/cart/Cart";
+import { Checkout } from "../pages/chekout/Checkout";
 import { Home } from "../pages/Home";
 import Login from "../pages/Login";
-import { ProductDetail } from "../pages/ProductDetail";
+import { ProductDetail } from "../pages/products/ProductDetail";
 import Register from "../pages/Register";
 
 export const AppRouter = () => {

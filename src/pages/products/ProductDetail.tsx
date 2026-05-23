@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useProducts } from '../hooks/useProducts';
-import { useCart } from '../hooks/useCart';
-import RatingStars from '../components/products/RatingStars';
-import ReviewSection from '../components/products/ReviewSection';
-import Spinner from '../components/common/Spinner';
-import { Product } from '../types';
+import { useProducts } from '../../hooks/useProducts';
+import { useCart } from '../../hooks/useCart';
+import RatingStars from '../../components/products/RatingStars';
+import ReviewSection from '../../components/products/ReviewSection';
+import Spinner from '../../components/common/Spinner';
+import { Product } from '../../types';
 import { ShoppingCart, ArrowLeft, ShieldAlert, BadgeCheck, RotateCcw, Cpu } from 'lucide-react';
 
 export const ProductDetail: React.FC = () => {

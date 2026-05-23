@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
+import { useCart } from '../../hooks/useCart';
 import { Trash2, Plus, Minus, ArrowLeft, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
 
 export const Cart: React.FC = () => {
