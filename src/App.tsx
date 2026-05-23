@@ -6,6 +6,7 @@ import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/layout/Navbar';
 import CartDrawer from './components/cart/CartDrawer';
 import { ProtectedRoute, AdminRoute } from '../src/Routes/ProtectedRoutes';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Pages
 import Home from './pages/Home';
@@ -57,69 +58,71 @@ const MainLayout: React.FC = () => {
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <ProductProvider>
-          <CartProvider>
-            <Routes>
-              {/* Main Layout containing Public & Client-Protected routes */}
-              <Route path="/" element={<MainLayout />}>
-                {/* Public Store Routes */}
-                <Route index element={<Home />} />
-                <Route path="product/:id" element={<ProductDetail />} />
-                <Route path="cart" element={<Cart />} />
-                
-                {/* Auth Routes */}
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
+      <ErrorBoundary>
+        <AuthProvider>
+          <ProductProvider>
+            <CartProvider>
+              <Routes>
+                {/* Main Layout containing Public & Client-Protected routes */}
+                <Route path="/" element={<MainLayout />}>
+                  {/* Public Store Routes */}
+                  <Route index element={<Home />} />
+                  <Route path="product/:id" element={<ProductDetail />} />
+                  <Route path="cart" element={<Cart />} />
+                  
+                  {/* Auth Routes */}
+                  <Route path="login" element={<Login />} />
+                  <Route path="register" element={<Register />} />
 
-                {/* Protected Customer Routes */}
-                <Route
-                  path="checkout"
-                  element={
-                    <ProtectedRoute>
-                      <Checkout />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
+                  {/* Protected Customer Routes */}
+                  <Route
+                    path="checkout"
+                    element={
+                      <ProtectedRoute>
+                        <Checkout />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
 
-                {/* Protected Admin Routes */}
-                <Route
-                  path="admin"
-                  element={
-                    <AdminRoute>
-                      <Dashboard />
-                    </AdminRoute>
-                  }
-                />
-                <Route
-                  path="admin/products"
-                  element={
-                    <AdminRoute>
-                      <ProductsCrud />
-                    </AdminRoute>
-                  }
-                />
-                <Route
-                  path="admin/orders"
-                  element={
-                    <AdminRoute>
-                      <OrdersList />
-                    </AdminRoute>
-                  }
-                />
-              </Route>
-            </Routes>
-          </CartProvider>
-        </ProductProvider>
-      </AuthProvider>
+                  {/* Protected Admin Routes */}
+                  <Route
+                    path="admin"
+                    element={
+                      <AdminRoute>
+                        <Dashboard />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/products"
+                    element={
+                      <AdminRoute>
+                        <ProductsCrud />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/orders"
+                    element={
+                      <AdminRoute>
+                        <OrdersList />
+                      </AdminRoute>
+                    }
+                  />
+                </Route>
+              </Routes>
+            </CartProvider>
+          </ProductProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

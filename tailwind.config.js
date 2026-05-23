@@ -23,6 +23,8 @@ export default {
       fontFamily: {
         cyber: ["Space Grotesk", "sans-serif"],
         display: ["Orbitron", "sans-serif"],
+        gothic: ["MedievalSharp", "serif"],
+        "gothic-deco": ["Cinzel Decorative", "serif"],
       },
       boxShadow: {
         "neon-cyan": "0 0 8px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2)",

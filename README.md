@@ -41,6 +41,7 @@ Hemos ejecutado un plan de refactorización integral sobre el núcleo del proyec
 | **Google Sign-In** | [auth.service.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/services/auth.services/auth.service.ts)<br/>[AuthProvider.tsx](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/providers/AuthProvider.tsx) | **Registro Automatizado** | Integración de inicio de sesión con Google usando `GoogleAuthProvider` y `signInWithPopup`. Se acopló en `onAuthStateChanged` para detectar nuevos ingresos y crear automáticamente su perfil de usuario en la colección `/users` de Firestore. | Ofrece una experiencia de registro en 1-click rápida para el cliente final y centraliza los perfiles de usuario de forma transparente. |
 | **Carga Segura de Multimedia** | [presign.ts](file:///C:/Users/richa/Documents/proyect/proyecto-m5/api/presign.ts) | **Serverless Presigned URLs** | Creación de una API Serverless que genera URLs temporales autorizadas para subidas directas a un bucket de AWS S3 privado, protegiendo las credenciales secretas de AWS en el servidor. | Permite que el Panel de Administración CRUD de productos suba imágenes de alta definición directamente a S3 sin exponer claves de acceso del frontend. |
 | **Soporte de Semillero** | [seed.js](file:///C:/Users/richa/Documents/proyect/proyecto-m5/seed.js) | **Base de Datos Inicial** | Creación de un script autónomo de sembrado que conecta con la base de datos Firestore y carga automáticamente el catálogo centralizado de Streetwear y Calzado Tecnológico. | Facilita la inicialización del entorno de pruebas o producción en segundos, poblando la interfaz de usuario de inmediato. |
+| **Manejo de Errores Gótico** | [ErrorBoundary.tsx](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/components/common/ErrorBoundary.tsx)<br/>[GothicErrorAlert.tsx](file:///C:/Users/richa/Documents/proyect/proyecto-m5/src/components/common/GothicErrorAlert.tsx) | **Resiliencia & UI/UX** | Creación de una red de control de excepciones en tiempo de ejecución basada en un ErrorBoundary de clase y un visualizador de Alertas estilizado como "Códice Gótico Digital" con animaciones interactivas de engranajes y herramientas de reparación. | Evita colapsos de interfaz de usuario, blindando la navegación global y proveyendo feedback al usuario en situaciones críticas con la frase corporativa de soporte. |
 
 ---
 
@@ -54,6 +55,26 @@ Hemos ejecutado un plan de refactorización integral sobre el núcleo del proyec
   - **Efectos Hover Neon**: Resplandores de neón y sombras proyectadas animadas (`shadow-[0_0_15px_rgba(0,240,255,0.7)]`), transiciones suaves y desplazamientos leves en tres dimensiones (`scale-105 -translate-y-0.5`).
   - **Retroalimentación Física en Click**: Encogimiento tridimensional instantáneo (`active:scale-95 translate-y-0`) para simular presión mecánica real.
   - **Bordes y Tiras Activas**: Bordes neón reactivos, badges dinámicos y un filtro CRT de scanlines sutiles para reforzar la inmersión visual.
+- **Carteles Góticos Digitales**: Alertas y carteles de error robustos con bordes afilados e importación de fuentes caligráficas medievales en el diseño UI/UX.
+
+---
+
+## ⛪ Sistema de Control de Errores Gótico-Cyberpunk (Resiliencia y Feedback UI/UX)
+
+Para garantizar un blindaje absoluto contra excepciones inesperadas de renderizado en tiempo de ejecución (que de otro modo congelarían la SPA completa) y optimizar el feedback al usuario final, se diseñó un módulo de control e ilustración de fallos con estética medieval-cyberpunk:
+
+1. **ErrorBoundary Centralizado**:
+   - Componente de clase de ciclo de vida (`src/components/common/ErrorBoundary.tsx`) con tipado estricto en TypeScript.
+   - Captura cualquier excepción de renderizado y monta un componente alternativo de forma segura sin romper la navegación general del cliente o del administrador.
+   - Provee una función de reinvocación (`resetErrorBoundary`) que permite volver a cargar el árbol de componentes después de corregir el error.
+
+2. **Visualizador de Fallos "Códice Gótico Digital" (`GothicErrorAlert.tsx`)**:
+   - **Tipografía Caligráfica Medieval**: Importación dinámica de las fuentes Google Fonts `Cinzel Decorative` (para títulos dramáticos) y `MedievalSharp` (para subtítulos estilizados góticos).
+   - **Gears Adjustment Visualizer**: Una caja de ajustes analógicos y digitales interactiva con **dos engranajes de neón concurrentes** (Settings & Wrench) que giran en direcciones opuestas gracias a micro-animaciones CSS. Esto da feedback inmediato al usuario sobre una tarea técnica activa en segundo plano.
+   - **Feedback Claro de Soporte**: Mapea textos amigables y legibles, resaltando por defecto la frase de mantenimiento:
+     > *"Nuestro equipo se encuentra trabajando para solucionar los inconvenientes"*
+   - **Códice de Fallos (Debug Codex Accordion)**: Panel desplegable seguro que muestra en forma de consola de matriz el mensaje de excepción técnica y el *stack trace* completo, ideal para depuración en entornos de desarrollo y administración.
+   - **CTAs Góticos Activos**: Botones de estilo neón interactivos para reintentar la renderización o regresar al "Santuario Principal" (inicio) de forma instantánea.
 
 ---
 
@@ -177,7 +198,7 @@ npm.cmd run build
 
 ## 🤖 Bitácora de Uso de IA
 
-De acuerdo con las mejores prácticas de ingeniería asistida por Inteligencia Artificial, se documentan los siguientes **5 momentos clave** donde la IA intervino activamente en el diseño, solución de problemas y optimización del proyecto:
+De acuerdo con las mejores prácticas de ingeniería asistida por Inteligencia Artificial, se documentan los siguientes **6 momentos clave** donde la IA intervino activamente en el diseño, solución de problemas y optimización del proyecto:
 
 | # | Fase del Desarrollo | Desafío / Necesidad Técnica | Intervención y Decisión Apoyada por IA | Evidencia de Aprendizaje e Impacto en el Proyecto |
 |---|----------------------|------------------------------|-----------------------------------------|----------------------------------------------------|
@@ -186,6 +207,7 @@ De acuerdo con las mejores prácticas de ingeniería asistida por Inteligencia A
 | **3** | **Optimización DB** | Cargar catálogos extensos de productos sin generar altos costos de lectura en Firebase Firestore o causar retardos de red. | La IA estructuró la paginación basada en cursores Firestore (`limit(12)`, `startAfter`) en lotes exactos de **12 productos** por página. Aconsejó combinar el catálogo con un selector de categoría predeterminada enfocado en tecnología. | **Escalabilidad**: Se resolvió la carga progresiva de catálogos mediante "Cargar más", evitando consultar documentos redundantes y agilizando la navegación en dispositivos móviles con baja conexión. |
 | **4** | **Aseguramiento de Calidad** | Diseñar pruebas de integración y unitarias fiables sin depender de conexiones activas a los servidores de Firebase. | La IA propuso mockear a nivel de módulo (`vi.mock`) las librerías `firebase/auth` y `firebase/firestore`. Sugirió estructurar un archivo `src/tests/setup.ts` limpio y reescribir las rutas relativas en Vitest para las llamadas a hooks. | **Pruebas veloces**: Se logró una cobertura completa con 16 tests pasando exitosamente en menos de 4 segundos. Se probaron las restricciones de ruta de cliente y administrador de forma totalmente aislada. |
 | **5** | **Diseño e Interacciones** | Crear botones con estilo streetwear cyberpunk altamente estéticos que tuvieran un comportamiento ultra-reactivo en hover y click físico. | La IA sugirió configurar clases Tailwind de CSS personalizadas (`@apply` en `index.css`) con variables HSL para neones y animaciones tridimensionales (`scale-105`, `active:scale-95`). | **Aumento de engagement**: Se crearon estados visuales impactantes (`btn-neon-cyan`, `btn-neon-pink`, `btn-neon-lime`) que reaccionan inmediatamente al cursor, eliminando la rigidez de las plantillas comerciales estándar. |
+| **6** | **Resiliencia & UI/UX** | Blindar el renderizado de la SPA ante excepciones fatales e ilustrar los fallos de manera personalizada y estética con feedback interactivo. | La IA guió la creación de un `ErrorBoundary` de clase tipo try-catch y un componente `GothicErrorAlert` con estética medieval-cyberpunk. Se implementó un visualizador de engranajes y llaves con animaciones CSS duales, la frase de soporte oficial y un acordeón "Códice de Fallos" para depuración técnica profunda. | **UX Robusta**: Ante cualquier crash, la app ya no se queda en blanco; en su lugar, ofrece un cartel estilizado de soporte amigable con herramientas de diagnóstico y botones de reintento. Además, se desarrolló una suite de pruebas en Vitest que valida el 100% de la lógica de recuperación de la red. |
 
 ---
 
