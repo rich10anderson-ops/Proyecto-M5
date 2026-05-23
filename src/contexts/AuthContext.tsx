@@ -38,7 +38,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const clearError = () => setError(null);
 
-  // Sincroniza el perfil desde Firestore o crea uno. Si falla, usa un perfil local de fallback para desarrollo.
   const syncUserProfile = async (firebaseUser: User) => {
     try {
       const userDocRef = doc(db, 'users', firebaseUser.uid);
@@ -49,9 +48,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setProfile(data);
       } else {
         // Crear un nuevo perfil de usuario en Firestore
-
-// Comprobar si el correo electrónico incluye "admin" para otorgar automáticamente 
-// el rol de administrador y facilitar las pruebas y la configuración.
         const isEmailAdmin = firebaseUser.email?.toLowerCase().includes('admin') ?? false;
         const newRole: UserRole = isEmailAdmin ? 'admin' : 'customer';
 
@@ -68,7 +64,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     } catch (err: any) {
       console.warn('Firestore user profile sync failed (using local fallback profile):', err);
-      // Fallback for local testing if Firestore security rules or keys are not set up yet
       const isEmailAdmin = firebaseUser.email?.toLowerCase().includes('admin') ?? false;
       const fallbackProfile: UserProfile = {
         uid: firebaseUser.uid,
@@ -82,7 +77,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
-    // Si estamos en modo simulado, no escuchamos los cambios de autenticación de Firebase.
     if (isMock) return;
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -129,7 +123,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsMock(false);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-     // Actualizar el nombre para mostrar en Firebase Auth
 
      
       await updateProfile(userCredential.user, { displayName: name });
@@ -183,7 +176,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // Mock switch for quick developer testing (Admin vs Customer)
   const switchToMockMode = (role: UserRole) => {
     setLoading(true);
     setIsMock(true);
