@@ -5,7 +5,7 @@ import { ProductProvider } from './contexts/ProductContext';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/layout/Navbar';
 import CartDrawer from './components/cart/CartDrawer';
-import { ProtectedRoute, AdminRoute } from './routes/protected/ProtectedRoutes';
+import { ProtectedRoute, AdminRoute } from './routes/ProtectedRoutes';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Pages
