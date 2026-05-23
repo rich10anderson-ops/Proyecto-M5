@@ -48,7 +48,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setProfile(data);
       } else {
         // Crear un nuevo perfil de usuario en Firestore
-        const isEmailAdmin = firebaseUser.email?.toLowerCase().includes('admin') ?? false;
+        // Lista de correos autorizados como administradores
+        const ALLOWED_ADMIN_EMAILS = ['admin@neontech.com'];
+        const userEmail = firebaseUser.email?.toLowerCase();
+        const isEmailAdmin = userEmail ? ALLOWED_ADMIN_EMAILS.includes(userEmail) : false;
         const newRole: UserRole = isEmailAdmin ? 'admin' : 'customer';
 
         const newProfile: UserProfile = {
@@ -64,7 +67,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     } catch (err: any) {
       console.warn('Firestore user profile sync failed (using local fallback profile):', err);
-      const isEmailAdmin = firebaseUser.email?.toLowerCase().includes('admin') ?? false;
+      const ALLOWED_ADMIN_EMAILS = ['admin@neontech.com'];
+      const userEmail = firebaseUser.email?.toLowerCase();
+      const isEmailAdmin = userEmail ? ALLOWED_ADMIN_EMAILS.includes(userEmail) : false;
       const fallbackProfile: UserProfile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email || '',

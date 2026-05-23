@@ -1,9 +1,9 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from './hooks/useAuth';
-import Spinner from './components/common/Spinner';
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import Spinner from '../components/common/Spinner';
 
-export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ProtectedRoute: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -20,10 +20,10 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return children ? <>{children}</> : <Outlet />;
 };
 
-export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AdminRoute: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { user, profile, loading } = useAuth();
   const location = useLocation();
 
@@ -40,5 +40,5 @@ export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }
     return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return children ? <>{children}</> : <Outlet />;
 };
