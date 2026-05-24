@@ -35,48 +35,45 @@ export async function listProducts(
 ): Promise<ListProductsResult> {
 	const { categoryId, searchPrefix, pageSize = 20, cursor } = params;
 	
-	//* Array de Queries:
+	
 	const constraints: QueryConstraint[] = [];
 	
-	//* Filtros dinámicos:
+	
 	if (categoryId) {
 		constraints.push(where("categoryId", "==", categoryId));
 	}
 	
-	//* Orden, obligatorio en Firebase cuando paginamos:
+	
 	constraints.push(orderBy("nameLower"));
 	
-	//* Busqueda por prefijo:
+	
 	if (searchPrefix && searchPrefix.length >= 2) {
 		constraints.push(startAt(searchPrefix));
 		constraints.push(endAt(searchPrefix + "\uf8ff"));
 	}
 	
-	//* Paginacion, utilizando cursores a documentos reales:
+	
 	if (cursor) {
 		constraints.push(startAfter(cursor));
 	}
 	constraints.push(limit(pageSize));
 	
-	//* Query:
-	const q = query(collection(db, "products"), ...constraints);
-  //* constraints = [ where("categoryId": "zapatillas"), orderBy("nameLower"), cursor: 4, pageSize:4 ]
 	
-	//* Consulta a Firestone:
+	const q = query(collection(db, "products"), ...constraints);
+
 	const snap = await getDocs(q);
 	
-	//* Mapeo de ID:
+	
 	const items = snap.docs.map((d) => ({
 		id: d.id,
 		...(d.data() as Omit<Product, "id">),
 	}));
 	
-	//* Ultimo Documento del resultado, marca proximo envio:
 	const lastDoc =
 		snap.docs.length > 0
 			? snap.docs[snap.docs.length - 1]
 			: null;
 	
-	//* Retorno de respuesta:
+	
 	return { items, lastDoc };
 }
