@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const [localError, setLocalError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { loginWithEmail, loginWithGoogle, switchToMockMode, error, clearError, user } = useAuth();
+  const { loginWithEmail, loginWithGoogle, error, clearError, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -57,10 +57,6 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleMockLogin = (role: 'admin' | 'customer') => {
-    switchToMockMode(role);
-    navigate(from, { replace: true });
-  };
 
   return (
     <div className="min-h-[90vh] flex flex-col justify-center items-center px-4 py-12 bg-cyber-black cyber-grid">
@@ -199,32 +195,6 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* ==========================================================================
-         MOCK AUTHENTICATION BYPASS BAR (Developer Tool)
-         ========================================================================== */}
-      <div className="mt-8 w-full max-w-md bg-cyber-gray/40 border border-cyber-cyan/30 p-4 shadow-lg flex flex-col items-center">
-        <div className="flex items-center gap-2 mb-2.5 text-cyber-cyan text-xs font-mono uppercase tracking-widest">
-          <Terminal className="h-4 w-4 animate-pulse" />
-          <span>HERRAMIENTA DE DESARROLLADOR</span>
-        </div>
-        <p className="text-[10px] text-cyber-light/60 font-mono text-center mb-3">
-          ¿No tienes claves de Firebase configuradas? Utiliza el bypass simulado para probar la app instantáneamente:
-        </p>
-        <div className="flex flex-row gap-3 w-full justify-center">
-          <button
-            onClick={() => handleMockLogin('customer')}
-            className="flex-1 btn-neon-cyan py-1.5 text-[9px] uppercase tracking-wider font-bold rounded-none"
-          >
-            Modo Cliente (Mock)
-          </button>
-          <button
-            onClick={() => handleMockLogin('admin')}
-            className="flex-1 btn-neon-pink py-1.5 text-[9px] uppercase tracking-wider font-bold rounded-none"
-          >
-            Modo Admin (Mock)
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

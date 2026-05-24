@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
-import { ShoppingCart, User, Shield, Menu, X, LogOut, Package } from 'lucide-react';
+import { ShoppingCart, User, Shield, Menu, X, LogOut, Package, Share2, Github, Twitter, Linkedin, Facebook, Instagram, Copy, Check, MessageCircle } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, profile, logout } = useAuth();
   const { totalItems, setCartOpen } = useCart();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.origin);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleCartClick = () => {
     setCartOpen(true);
@@ -78,6 +86,118 @@ export const Navbar: React.FC = () => {
 
           {/* Cart Icon & User controls */}
           <div className="flex items-center gap-4">
+            
+            {/* Share Dropdown Button */}
+            <div className="relative hidden sm:block">
+              <button
+                onClick={() => setShareDropdownOpen(!shareDropdownOpen)}
+                className="flex items-center gap-1.5 px-3 py-1.5 border border-cyber-pink/50 hover:border-cyber-pink hover:bg-cyber-pink/5 text-cyber-pink font-mono text-[9px] uppercase tracking-widest transition-all duration-300 select-none cursor-pointer outline-none rounded-none"
+              >
+                <Share2 size={12} className="animate-pulse" />
+                <span>Compartir</span>
+              </button>
+              
+              {shareDropdownOpen && (
+                <>
+                  {/* Overlay to close the dropdown when clicking outside */}
+                  <div
+                    className="fixed inset-0 z-30 bg-transparent"
+                    onClick={() => setShareDropdownOpen(false)}
+                  />
+                  {/* Dropdown content */}
+                  <div className="absolute right-0 mt-2.5 w-52 bg-cyber-card border-2 border-cyber-pink p-3 space-y-2 z-40 shadow-[0_0_20px_rgba(255,0,127,0.25)] animate-slide-in font-mono text-[10px] rounded-none">
+                    <div className="text-[8px] text-cyber-pink font-bold border-b border-cyber-pink/20 pb-1.5 tracking-widest uppercase">
+                      COMPARTIR NODO_
+                    </div>
+                    
+                    {/* GitHub */}
+                    <a
+                      href="https://github.com/rich10anderson-ops/Proyecto-M5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <Github size={12} className="text-cyber-cyan" />
+                      <span>GITHUB REPO</span>
+                    </a>
+                    
+                    {/* WhatsApp */}
+                    <a
+                      href="https://api.whatsapp.com/send?text=Mira%20este%20incre%C3%ADble%20proyecto%20de%20streetwear%20y%20tecnolog%C3%ADa%20ne%C3%B3n%20%22Neon%20Tech%22%3A%20https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <MessageCircle size={12} className="text-cyber-lime" />
+                      <span>WHATSAPP</span>
+                    </a>
+
+                    {/* Facebook */}
+                    <a
+                      href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <Facebook size={12} className="text-cyber-cyan" />
+                      <span>FACEBOOK</span>
+                    </a>
+
+                    {/* Instagram */}
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <Instagram size={12} className="text-cyber-pink" />
+                      <span>INSTAGRAM</span>
+                    </a>
+
+                    {/* LinkedIn */}
+                    <a
+                      href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <Linkedin size={12} className="text-cyber-cyan" />
+                      <span>LINKEDIN</span>
+                    </a>
+
+                    {/* Twitter/X */}
+                    <a
+                      href="https://twitter.com/intent/tweet?text=Mira%20este%20incre%C3%ADble%20proyecto%20de%20streetwear%20y%20tecnolog%C3%ADa%20ne%C3%B3n%20%22Neon%20Tech%22!%20https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20"
+                    >
+                      <Twitter size={12} className="text-cyber-cyan" />
+                      <span>X / TWITTER</span>
+                    </a>
+
+                    {/* Copy Link */}
+                    <button
+                      onClick={handleCopyLink}
+                      className="w-full flex items-center gap-2.5 p-1.5 hover:bg-cyber-pink/15 text-white hover:text-cyber-pink transition-all border border-transparent hover:border-cyber-pink/20 bg-transparent text-left cursor-pointer outline-none font-mono text-[10px] rounded-none"
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={12} className="text-cyber-lime animate-bounce" />
+                          <span className="text-cyber-lime font-bold">¡COPIADO!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={12} className="text-cyber-cyan" />
+                          <span>COPIAR ENLACE</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* Cart trigger button */}
             <button
               onClick={handleCartClick}
@@ -180,6 +300,80 @@ export const Navbar: React.FC = () => {
               Ingresar Terminal
             </Link>
           )}
+
+          {/* Mobile Share Section */}
+          <div className="space-y-2.5 pt-4 border-t border-cyber-gray/30">
+            <div className="text-[9px] text-cyber-pink/70 font-bold tracking-widest flex items-center gap-1.5">
+              <Share2 size={10} className="animate-pulse" />
+              <span>COMPARTIR REDES</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2 font-mono text-[9px]">
+              <a
+                href="https://github.com/rich10anderson-ops/Proyecto-M5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <Github size={10} className="text-cyber-cyan" /> GITHUB
+              </a>
+              <a
+                href="https://api.whatsapp.com/send?text=Mira%20este%20incre%C3%ADble%20proyecto%20de%20streetwear%20y%20tecnolog%C3%ADa%20ne%C3%B3n%20%22Neon%20Tech%22%3A%20https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <MessageCircle size={10} className="text-cyber-lime" /> WHATSAPP
+              </a>
+              <a
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <Facebook size={10} className="text-cyber-cyan" /> FACEBOOK
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <Instagram size={10} className="text-cyber-pink" /> INSTAGRAM
+              </a>
+              <a
+                href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <Linkedin size={10} className="text-cyber-cyan" /> LINKEDIN
+              </a>
+              <a
+                href="https://twitter.com/intent/tweet?text=Mira%20este%20incre%C3%ADble%20proyecto%20de%20streetwear%20y%20tecnolog%C3%ADa%20ne%C3%B3n%20%22Neon%20Tech%22!%20https%3A%2F%2Fgithub.com%2Frich10anderson-ops%2FProyecto-M5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 p-2 bg-cyber-black border border-cyber-gray/40 text-white hover:text-cyber-pink"
+              >
+                <Twitter size={10} className="text-cyber-cyan" /> TWITTER
+              </a>
+            </div>
+            <button
+              onClick={handleCopyLink}
+              className="w-full flex items-center justify-center gap-2 p-2 bg-cyber-black border border-cyber-pink/30 hover:border-cyber-pink text-white hover:text-cyber-pink font-mono text-[9px] cursor-pointer outline-none rounded-none"
+            >
+              {copied ? (
+                <>
+                  <Check size={10} className="text-cyber-lime animate-bounce" />
+                  <span className="text-cyber-lime font-bold">¡ENLACE COPIADO!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={10} className="text-cyber-cyan" />
+                  <span>COPIAR ENLACE AL PORTAPAPELES</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       )}
     </nav>

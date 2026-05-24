@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { getOrdersByUserId } from '../services/firestore';
 import { Order } from '../types';
@@ -6,7 +7,7 @@ import Spinner from '../components/common/Spinner';
 import { User, Mail, Calendar, Shield, Package, ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react';
 
 export const Profile: React.FC = () => {
-  const { user, profile, isMock, switchToMockMode, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState<boolean>(true);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
@@ -39,19 +40,13 @@ export const Profile: React.FC = () => {
           <p className="text-xs font-mono text-cyber-light/40 uppercase">
             Inicia sesión con tu terminal para sincronizar tu perfil de usuario y tu historial de transacciones.
           </p>
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <button
-              onClick={() => switchToMockMode('customer')}
-              className="btn-neon-cyan py-2.5 text-[9px]"
+          <div className="pt-2">
+            <Link
+              to="/login"
+              className="btn-neon-cyan block w-full py-2.5 text-[10px] text-center"
             >
-              MOCK CLIENTE
-            </button>
-            <button
-              onClick={() => switchToMockMode('admin')}
-              className="btn-neon-pink py-2.5 text-[9px]"
-            >
-              MOCK ADMIN
-            </button>
+              INGRESAR TERMINAL
+            </Link>
           </div>
         </div>
       </div>
@@ -99,24 +94,6 @@ export const Profile: React.FC = () => {
 
       <div className="max-w-5xl mx-auto z-10 relative space-y-8">
         
-        {/* DEVELOPER QUICK ROLE BYPASS BAR */}
-        <div className="bg-cyber-card border border-cyber-yellow/40 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_0_15px_rgba(255,230,0,0.05)]">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 bg-cyber-yellow animate-pulse" />
-            <h4 className="font-display font-black text-xs uppercase text-white tracking-widest">
-              DEVELOPER BYPASS NODE <span className="text-cyber-yellow">// CONTROL PANEL</span>
-            </h4>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[9px] font-mono text-cyber-light/40 uppercase">ROL ACTIVO: {profile.role}</span>
-            <button
-              onClick={() => switchToMockMode(profile.role === 'admin' ? 'customer' : 'admin')}
-              className="btn-neon-violet py-1.5 px-3 text-[9px] font-mono tracking-normal"
-            >
-              CAMBIAR A {profile.role === 'admin' ? 'CUSTOMER' : 'ADMIN'}
-            </button>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           

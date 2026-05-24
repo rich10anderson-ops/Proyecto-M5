@@ -55,6 +55,15 @@ async function seed() {
 }
 
 seed().catch(err => {
-	console.error(err);
+	console.error("\n❌ ERROR DE CONEXIÓN O PERMISOS EN FIRESTORE:");
+	console.error(err.message || err);
+	console.error("\n👉 SOLUCIÓN DEFINITIVA PARA PRODUCCIÓN:");
+	console.error("1. Ve a Firebase Console -> Firestore Database -> pestaña 'Rules'.");
+	console.error("2. Permite temporalmente lecturas y escrituras públicas para la siembra cambiando las reglas a:");
+	console.error("   allow read, write: if true;");
+	console.error("3. Vuelve a ejecutar 'node seed.js' en tu terminal.");
+	console.error("4. Una vez completado con éxito, restablece reglas seguras para producción, por ejemplo:");
+	console.error("   allow read: if true;");
+	console.error("   allow write: if request.auth != null;");
 	process.exit(1);
 });
