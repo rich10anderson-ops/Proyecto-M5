@@ -331,33 +331,34 @@ export const getProducts = async (
     qConstraints.push(limit(limitCount));
 
     let querySnapshot;
+    let productsList: Product[] = [];
+    let isFallbackActive = false;
+
     try {
       const q = query(productsRef, ...qConstraints);
       querySnapshot = await getDocs(q);
+      productsList = querySnapshot.docs.map(docSnap => docSnap.data());
     } catch (indexError) {
-      console.warn('getProducts - Firestore index missing or query failed, trying client fallback query:', indexError);
+      console.warn('getProducts - Firestore index missing, falling back to client-side filtering:', indexError);
+      isFallbackActive = true;
       
+      // Query without category filtering (does not require composite index)
       const fallbackConstraints: any[] = [orderBy('createdAt', 'desc')];
-      if (category && category !== 'Todos') {
-        let dbCategory = category;
-        if (category === 'Zapatillas') dbCategory = 'shoes';
-        if (category === 'Ropa') dbCategory = 'clothing';
-        if (category === 'Accesorios') dbCategory = 'accessories';
-
-        const isSeedCategory = dbCategory === 'shoes' || dbCategory === 'clothing' || dbCategory === 'accessories';
-        const categoryField = isSeedCategory ? 'categoryId' : 'category';
-        fallbackConstraints.push(where(categoryField, '==', dbCategory));
-      }
       if (lastVisible) {
         fallbackConstraints.push(startAfter(lastVisible));
       }
-      fallbackConstraints.push(limit(limitCount * 2));
+      // Fetch a larger limit to ensure we have enough matches after filtering on client
+      fallbackConstraints.push(limit(100)); 
       
       const qFallback = query(productsRef, ...fallbackConstraints);
       querySnapshot = await getDocs(qFallback);
+      productsList = querySnapshot.docs.map(docSnap => docSnap.data());
     }
     
-    let productsList: Product[] = querySnapshot.docs.map(docSnap => docSnap.data());
+    // Perform client-side category filtering in fallback mode
+    if (isFallbackActive && category && category !== 'Todos') {
+      productsList = productsList.filter(p => p.category === category);
+    }
 
     // Filtro cliente para la búsqueda por texto si está presente y falló o requiere más precisión
     if (search) {
