@@ -28,3 +28,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export default app;
+
+if (import.meta.env.DEV) {
+  (window as any).__db = db;
+}
