@@ -2,7 +2,7 @@ import React, { createContext, useReducer, useEffect, useState, ReactNode } from
 import { CartItem, Product, CartState } from '../types';
 import { cartReducer, initialCartState } from '../types/cartReducer';
 import { useAuth } from '../hooks/useAuth';
-import { getUserCart, saveUserCart } from '../services/firestore';
+import { getUserCart, saveUserCart } from '../services/firebase/firestore';
 import { CheckCircle, X } from 'lucide-react';
 
 interface CartContextType extends CartState {

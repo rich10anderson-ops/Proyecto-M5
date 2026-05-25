@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProducts } from '../../hooks/useProducts';
-import { getAllOrders, seedProductsInCloud } from '../../services/firestore';
+import { getAllOrders, seedProductsInCloud } from '../../services/firebase/firestore';
 import { Order } from '../../types';
 import Spinner from '../../components/common/Spinner';
 import { Link } from 'react-router-dom';

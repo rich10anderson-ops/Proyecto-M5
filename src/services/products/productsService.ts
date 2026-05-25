@@ -12,7 +12,7 @@ import {
   type QueryConstraint,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import type { Product } from "../types";
+import type { Product } from "../../types";
 
 export type ListProductsParams = {
 	categoryId?: string | null;

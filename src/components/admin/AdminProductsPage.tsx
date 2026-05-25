@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProducts, deleteProduct } from "../../services/products.service";
+import { getProducts, deleteProduct } from "../../services/products/products.service";
 import type { Product } from "../../types";
 
 type Status = "loading" | "empty" | "ready" | "error";

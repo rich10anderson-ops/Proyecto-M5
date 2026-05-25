@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProducts } from '../../hooks/useProducts';
 import RatingStars from './RatingStars';
-import { getReviewsPage, type ReviewsPage } from '../../services/firestore';
+import { getReviewsPage, type ReviewsPage } from '../../services/firebase/firestore';
 import { Review } from '../../types';
 import { MessageSquarePlus, MessageCircle, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';

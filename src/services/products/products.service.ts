@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../services/firebase";
-import type { Product } from "../types";
+import type { Product } from "../../types";
 
 const productsCollection = collection(db, "products");
 

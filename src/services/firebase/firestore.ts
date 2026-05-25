@@ -20,7 +20,7 @@ import {
   type DocumentData
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Product, Order, Review, CartItem, OrderStatus, OrderProductSnapshot } from '../types';
+import { Product, Order, Review, CartItem, OrderStatus, OrderProductSnapshot } from '../../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   toFirestore(product: Product): DocumentData {

@@ -4,8 +4,8 @@ import {
   createProduct,
   getProductById,
   updateProduct,
-} from "../../services/products.service";
-import { uploadImage } from "../../services/upload.service";
+} from "../../services/products/products.service";
+import { uploadImage } from "../../services/upload/upload.service";
 
 // TYPES
 type ProductFormFields = {

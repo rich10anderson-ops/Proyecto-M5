@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { getOrdersByUserId } from '../services/firestore';
+import { getOrdersByUserId } from '../services/firebase/firestore';
 import { Order } from '../types';
 import Spinner from '../components/common/Spinner';
 import { User, Mail, Calendar, Shield, Package, ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react';

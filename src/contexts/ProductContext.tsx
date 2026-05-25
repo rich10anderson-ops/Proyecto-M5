@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { Product, Review } from '../types';
-import { getProducts, getProductById, addReview as addReviewService } from '../services/firestore';
+import { getProducts, getProductById, addReview as addReviewService } from '../services/firebase/firestore';
 import { useAuth } from '../hooks/useAuth';
 
 interface ProductContextType {

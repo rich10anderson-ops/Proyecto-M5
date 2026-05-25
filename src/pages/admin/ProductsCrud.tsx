@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useProducts } from '../../hooks/useProducts';
-import { createProduct, updateProduct, deleteProduct } from '../../services/firestore';
-import { uploadProductImage } from '../../services/upload';
+import { createProduct, updateProduct, deleteProduct } from '../../services/firebase/firestore';
+import { uploadProductImage } from '../../services/upload/upload';
 import { Product } from '../../types';
 import Spinner from '../../components/common/Spinner';
 import { Link } from 'react-router-dom';

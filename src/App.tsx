@@ -13,9 +13,9 @@ import Home from './pages/home/Home';
 import ProductDetail from './pages/products/ProductDetail';
 import Cart from './pages/cart/Cart';
 import Checkout from './pages/checkout/Checkout';
-import Profile from './pages/Profile';
+import Profile from './pages/products/profiles/Profile';
 import Login from './pages/login/Login';
-import Register from './pages/Register';
+import Register from './pages/products/profiles/Register';
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard';
