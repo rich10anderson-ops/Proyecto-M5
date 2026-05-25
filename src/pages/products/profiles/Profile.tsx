@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { getOrdersByUserId } from '../services/firebase/firestore';
-import { Order } from '../types';
-import Spinner from '../components/common/Spinner';
+import { useAuth } from '../../../hooks/useAuth';
+import { getOrdersByUserId } from '../../../services/firebase/firestore';
+import { Order, CartItem } from '../../../types';
+import Spinner from '../../../components/common/Spinner';
 import { User, Mail, Calendar, Shield, Package, ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react';
 
 export const Profile: React.FC = () => {
@@ -225,7 +225,7 @@ export const Profile: React.FC = () => {
                             {/* Products summary list */}
                             <div className="space-y-2">
                               <div className="text-cyber-light/40 font-bold">--- PRODUCTOS ---</div>
-                              {order.items.map((item, idx) => (
+                              {order.items.map((item: CartItem, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center bg-cyber-black p-2 border border-cyber-gray/30">
                                   <span>{item.product.name} (x{item.quantity})</span>
                                   <span className="text-cyber-cyan">${(item.product.price * item.quantity).toFixed(2)}</span>

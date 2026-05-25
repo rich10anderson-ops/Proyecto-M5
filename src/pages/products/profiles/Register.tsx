@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../../hooks/useAuth';
 import { Mail, Lock, User as UserIcon, Terminal } from 'lucide-react';
 
 const Register: React.FC = () => {

@@ -8,7 +8,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../services/firebase";
+import { db } from "../firebase/firebase";
 import type { Product } from "../../types";
 
 const productsCollection = collection(db, "products");

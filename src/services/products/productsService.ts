@@ -11,7 +11,7 @@ import {
   type DocumentSnapshot,
   type QueryConstraint,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../firebase/firebase";
 import type { Product } from "../../types";
 
 export type ListProductsParams = {
