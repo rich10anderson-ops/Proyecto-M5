@@ -691,3 +691,42 @@ export const saveUserCart = async (userId: string, items: CartItem[]): Promise<v
     localStorage.setItem(`cyber_cart_${userId}`, JSON.stringify(items));
   }
 };
+
+export const seedProductsInCloud = async (): Promise<void> => {
+  const productsRef = collection(db, 'products');
+  const querySnapshot = await getDocs(productsRef);
+  if (querySnapshot.size > 0) {
+    throw new Error('La base de datos ya contiene productos. No es necesario sembrar.');
+  }
+
+  for (const product of MOCK_PRODUCTS) {
+    let dbCategory = product.category;
+    let dbCategoryId = product.category;
+    if (product.category === 'Zapatillas') {
+      dbCategory = 'shoes';
+      dbCategoryId = 'shoes';
+    } else if (product.category === 'Ropa' || product.category === 'Vestimenta') {
+      dbCategory = 'clothing';
+      dbCategoryId = 'clothing';
+    } else if (product.category === 'Accesorios') {
+      dbCategory = 'accessories';
+      dbCategoryId = 'accessories';
+    }
+
+    const docRef = doc(collection(db, 'products'));
+    await setDoc(docRef, {
+      name: product.name,
+      nameLower: product.name.toLowerCase(),
+      description: product.description || '',
+      price: product.price,
+      categoryId: dbCategoryId,
+      category: dbCategory,
+      image: product.imageUrl,
+      imageUrl: product.imageUrl,
+      stock: product.stock,
+      createdAt: product.createdAt,
+      averageRating: product.averageRating !== undefined ? product.averageRating : 4.5,
+      totalReviews: product.totalReviews !== undefined ? product.totalReviews : 0
+    });
+  }
+};

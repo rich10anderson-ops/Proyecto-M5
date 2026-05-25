@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProducts } from '../../hooks/useProducts';
-import { getAllOrders } from '../../services/firestore';
+import { getAllOrders, seedProductsInCloud } from '../../services/firestore';
 import { Order } from '../../types';
 import Spinner from '../../components/common/Spinner';
 import { Link } from 'react-router-dom';
@@ -32,6 +32,27 @@ export const Dashboard: React.FC = () => {
   const { products } = useProducts();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [seeding, setSeeding] = useState<boolean>(false);
+  const [seedError, setSeedError] = useState<string | null>(null);
+  const [seedSuccess, setSeedSuccess] = useState<boolean>(false);
+
+  const handleSeedDatabase = async () => {
+    setSeeding(true);
+    setSeedError(null);
+    setSeedSuccess(false);
+    try {
+      await seedProductsInCloud();
+      setSeedSuccess(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (err: any) {
+      console.error(err);
+      setSeedError(err.message || 'Error al sembrar la base de datos.');
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   useEffect(() => {
     const fetchGlobalData = async () => {
@@ -146,6 +167,41 @@ export const Dashboard: React.FC = () => {
             </Link>
           </div>
         </div>
+
+        {/* DATABASE SEEDER BANNER */}
+        {products.length === 0 && (
+          <div className="bg-cyber-card border-2 border-cyber-pink p-5 relative shadow-[0_0_20px_rgba(255,0,127,0.15)] flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="space-y-1 text-center sm:text-left">
+              <h3 className="font-display font-black text-sm uppercase text-white tracking-widest flex items-center gap-2 justify-center sm:justify-start">
+                <span className="w-2.5 h-2.5 bg-cyber-pink animate-pulse" />
+                BASE DE DATOS CLOUD VACÍA
+              </h3>
+              <p className="text-[10px] font-mono text-cyber-light/60 uppercase">
+                Detectamos que la colección "products" de Firestore está vacía en producción. Inicializa tu catálogo cyberpunk con un solo clic.
+              </p>
+            </div>
+            <button
+              onClick={handleSeedDatabase}
+              disabled={seeding}
+              className="btn-neon-pink px-6 py-2.5 text-[9px] font-mono tracking-widest whitespace-nowrap min-w-[170px]"
+            >
+              {seeding ? 'SINCRONIZANDO...' : 'SEMBRAR FIRESTORE'}
+            </button>
+          </div>
+        )}
+
+        {/* FEEDBACK STATUSES */}
+        {seedSuccess && (
+          <div className="bg-cyber-card border border-cyber-lime p-4 text-center text-cyber-lime font-mono text-xs uppercase tracking-wider animate-pulse">
+            🎉 ¡Base de datos sembrada con éxito! Recargando módulos en 2 segundos...
+          </div>
+        )}
+
+        {seedError && (
+          <div className="bg-cyber-card border border-cyber-pink p-4 text-center text-cyber-pink font-mono text-xs uppercase tracking-wider">
+            ❌ Error de siembra: {seedError}
+          </div>
+        )}
 
         {/* METRICS GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

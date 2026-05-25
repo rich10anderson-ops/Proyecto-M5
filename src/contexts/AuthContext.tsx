@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } else {
         // Crear un nuevo perfil de usuario en Firestore
         // Lista de correos autorizados como administradores
-        const ALLOWED_ADMIN_EMAILS = ['admin@neontech.com'];
+        const ALLOWED_ADMIN_EMAILS = ['rich10anderson@gmail.com'];
         const userEmail = firebaseUser.email?.toLowerCase();
         const isEmailAdmin = userEmail ? ALLOWED_ADMIN_EMAILS.includes(userEmail) : false;
         const newRole: UserRole = isEmailAdmin ? 'admin' : 'customer';
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     } catch (err: any) {
       console.warn('Firestore user profile sync failed (using local fallback profile):', err);
-      const ALLOWED_ADMIN_EMAILS = ['admin@neontech.com'];
+      const ALLOWED_ADMIN_EMAILS = ['rich10anderson@gmail.com'];
       const userEmail = firebaseUser.email?.toLowerCase();
       const isEmailAdmin = userEmail ? ALLOWED_ADMIN_EMAILS.includes(userEmail) : false;
       const fallbackProfile: UserProfile = {
@@ -188,7 +188,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const mockFirebaseUser = {
       uid: role === 'admin' ? 'mock-admin-123' : 'mock-customer-123',
-      email: role === 'admin' ? 'admin@neontech.com' : 'streetwear@neontech.com',
+      email: role === 'admin' ? 'rich10anderson@gmail.com' : 'streetwear@neontech.com',
       displayName: role === 'admin' ? 'CYBER ADMIN' : 'NEON BUYER',
     } as User;
 
