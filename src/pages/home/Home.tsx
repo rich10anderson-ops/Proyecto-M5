@@ -29,11 +29,11 @@ export const Home: React.FC = () => {
 
         <div className="max-w-3xl mx-auto space-y-6 z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink font-mono text-[9px] uppercase tracking-widest animate-pulse">
-            <Sparkles size={10} /> Street Neon Tech Collection v2.0
+            <Sparkles size={10} /> Dese el gusto de ser bien atendido v3.0
           </div>
           
           <h1 className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase text-white tracking-widest leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-            STREET <span className="text-cyber-cyan neon-text-cyan">NEON</span>
+            LA TIENDA <span className="text-cyber-cyan neon-text-cyan"> DE CHARRY</span>
           </h1>
           
           <p className="font-mono text-xs md:text-sm text-cyber-light/60 uppercase tracking-widest max-w-xl mx-auto leading-relaxed">
@@ -48,7 +48,7 @@ export const Home: React.FC = () => {
               }}
               className="btn-neon-cyan px-8 py-3 text-xs"
             >
-              CONECTAR EQUIPO
+              INGRESE AL CATÁLOGO
             </button>
 
             {/* Hero Share Button */}
