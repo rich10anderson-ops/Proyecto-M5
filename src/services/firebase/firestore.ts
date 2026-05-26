@@ -491,9 +491,35 @@ const buildOrderProductSnapshots = (items: CartItem[]): OrderProductSnapshot[] =
     name: product.name,
     price: product.price,
     category: product.category,
-    imageUrl: product.imageUrl,
+    imageUrl: product.imageUrl.startsWith('data:image/') ? '' : product.imageUrl,
     quantity,
   }));
+};
+
+const sanitizeOrderPayload = (order: Omit<Order, 'id'>): Omit<Order, 'id'> => {
+  const sanitizeProduct = (p: Product): Product => {
+    return {
+      ...p,
+      imageUrl: p.imageUrl.startsWith('data:image/') ? '' : p.imageUrl,
+      description: p.description.length > 500 ? p.description.substring(0, 500) + '...' : p.description
+    };
+  };
+
+  const sanitizedItems = order.items.map(item => ({
+    product: sanitizeProduct(item.product),
+    quantity: item.quantity
+  }));
+
+  const sanitizedSnapshots = (order.productSnapshots ?? buildOrderProductSnapshots(order.items)).map(snap => ({
+    ...snap,
+    imageUrl: snap.imageUrl.startsWith('data:image/') ? '' : snap.imageUrl
+  }));
+
+  return {
+    ...order,
+    items: sanitizedItems,
+    productSnapshots: sanitizedSnapshots
+  };
 };
 
 export const getReviewsPage = async (
@@ -595,10 +621,7 @@ export const addReview = async (
 // ==========================================================================
 
 export const createOrder = async (orderData: Omit<Order, 'id'>): Promise<string> => {
-  const orderPayload: Omit<Order, 'id'> = {
-    ...orderData,
-    productSnapshots: orderData.productSnapshots ?? buildOrderProductSnapshots(orderData.items),
-  };
+  const orderPayload = sanitizeOrderPayload(orderData);
 
   try {
     const docRef = await addDoc(collection(db, 'orders'), orderPayload);
@@ -667,29 +690,59 @@ export const updateOrderStatus = async (orderId: string, status: OrderStatus): P
 // ==========================================================================
 
 export const getUserCart = async (userId: string): Promise<CartItem[]> => {
+  let serializedItems: any[] = [];
   try {
     const docRef = doc(db, 'carts', userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return docSnap.data().items as CartItem[];
+      serializedItems = docSnap.data().items || [];
     }
-    return [];
   } catch (error) {
     console.warn(`getUserCart (${userId}) - Retornando carrito de localStorage:`, error);
     const cartStr = localStorage.getItem(`cyber_cart_${userId}`);
-    return cartStr ? JSON.parse(cartStr) : [];
+    if (cartStr) {
+      try {
+        serializedItems = JSON.parse(cartStr);
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
+
+  if (serializedItems.length === 0) return [];
+
+  const reconstructedItems: CartItem[] = [];
+  for (const item of serializedItems) {
+    if (item.product) {
+      // Gracefully support old full object format if it exists
+      reconstructedItems.push(item);
+    } else {
+      const product = await getProductById(item.productId);
+      if (product) {
+        reconstructedItems.push({
+          product,
+          quantity: item.quantity
+        });
+      }
+    }
+  }
+  return reconstructedItems;
 };
 
 export const saveUserCart = async (userId: string, items: CartItem[]): Promise<void> => {
+  const serializedItems = items.map(item => ({
+    productId: item.product.id,
+    quantity: item.quantity
+  }));
+
   try {
     const docRef = doc(db, 'carts', userId);
-    await setDoc(docRef, { items, updatedAt: new Date().toISOString() });
+    await setDoc(docRef, { items: serializedItems, updatedAt: new Date().toISOString() });
   } catch (error) {
     console.warn(`saveUserCart (${userId}) - Guardando en localStorage:`, error);
   } finally {
     // Sincronizar siempre localmente en localStorage como método secundario de respaldo seguro
-    localStorage.setItem(`cyber_cart_${userId}`, JSON.stringify(items));
+    localStorage.setItem(`cyber_cart_${userId}`, JSON.stringify(serializedItems));
   }
 };
 

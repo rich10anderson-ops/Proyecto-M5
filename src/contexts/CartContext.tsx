@@ -2,7 +2,7 @@ import React, { createContext, useReducer, useEffect, useState, ReactNode } from
 import { CartItem, Product, CartState } from '../types';
 import { cartReducer, initialCartState } from '../types/cartReducer';
 import { useAuth } from '../hooks/useAuth';
-import { getUserCart, saveUserCart } from '../services/firebase/firestore';
+import { getUserCart, saveUserCart, getProductById } from '../services/firebase/firestore';
 import { CheckCircle, X } from 'lucide-react';
 
 interface CartContextType extends CartState {
@@ -43,8 +43,19 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const guestCartStr = localStorage.getItem('cyber_cart_guest');
         if (guestCartStr) {
           try {
-            const items = JSON.parse(guestCartStr);
-            dispatch({ type: 'SET_CART', payload: items });
+            const serialized = JSON.parse(guestCartStr);
+            const reconstructed: CartItem[] = [];
+            for (const item of serialized) {
+              if (item.product) {
+                reconstructed.push(item);
+              } else {
+                const product = await getProductById(item.productId);
+                if (product) {
+                  reconstructed.push({ product, quantity: item.quantity });
+                }
+              }
+            }
+            dispatch({ type: 'SET_CART', payload: reconstructed });
           } catch (e) {
             console.error('Error parsing guest cart:', e);
             dispatch({ type: 'CLEAR_CART' });
@@ -71,7 +82,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.error('Error saving cloud cart:', error);
         }
       } else {
-        localStorage.setItem('cyber_cart_guest', JSON.stringify(state.items));
+        const serialized = state.items.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity
+        }));
+        localStorage.setItem('cyber_cart_guest', JSON.stringify(serialized));
       }
     };
 
