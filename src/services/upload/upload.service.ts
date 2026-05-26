@@ -1,13 +1,13 @@
 export const uploadImage = async (file: File): Promise<string> => {
 	//* 1. Pedimos URL firmada:
-	const presignResponse = await fetch("/api/presign", {
+	const presignResponse = await fetch("/api/get-presigned-url", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
 			filename: file.name,
-			contentType: file.type,
+			filetype: file.type,
 		}),
 	});
 	
@@ -15,10 +15,10 @@ export const uploadImage = async (file: File): Promise<string> => {
 		throw new Error("No se pudo obtener la URL firmada");
 	}
 	
-	const { url, publicUrl } = await presignResponse.json();
+	const { uploadUrl, fileUrl } = await presignResponse.json();
 	
 	//* 2. Upload directo a S3:
-	const uploadResponse = await fetch(url, {
+	const uploadResponse = await fetch(uploadUrl, {
 		method: "PUT",
 		headers: {
 			"Content-Type": file.type,
@@ -31,5 +31,5 @@ export const uploadImage = async (file: File): Promise<string> => {
 	}
 	  
 	//* 3. Retornamos URL pública:
-	return publicUrl;
+	return fileUrl;
 };

@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
 
   const awsAccessKey = process.env.AWS_ACCESS_KEY_ID;
   const awsSecretKey = process.env.AWS_SECRET_ACCESS_KEY;
-  const bucketName = process.env.AWS_S3_BUCKET_NAME || 'cyber-streetwear-bucket';
+  const bucketName = process.env.AWS_S3_BUCKET_NAME || process.env.AWS_S3_BUCKET || 'cyber-streetwear-bucket';
   const region = process.env.AWS_REGION || 'us-east-1';
 
   // Check if AWS keys are set up. If not, trigger the client-side mock/Base64 fallback gracefully.
