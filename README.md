@@ -29,7 +29,7 @@ A continuación se detalla la suite tecnológica integrada en el proyecto, adapt
 
 ## 🛠️ Tabla de Mejoras Arquitectónicas y Refactorizaciones Realizadas
 
-Hemos ejecutado un plan de refactorización integral sobre el núcleo del proyecto para elevar la seguridad de tipado, eliminar mappers inseguros y unificar el catálogo entre las pruebas simuladas y los datos de Firebase.
+Se ejecutado un plan de refactorización integral sobre el núcleo del proyecto para elevar la seguridad de tipado, eliminar mappers inseguros y unificar el catálogo entre las pruebas simuladas y los datos de Firebase.
 
 | Componente | Archivos Modificados / Nuevos | Tipo de Mejora | Detalle del Cambio Técnico | Beneficio e Impacto |
 | :--- | :--- | :---: | :--- | :--- |

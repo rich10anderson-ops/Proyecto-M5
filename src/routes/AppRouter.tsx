@@ -42,6 +42,7 @@ export const AppRouter = () => {
           <Route path="orders" element={<AdminOrdersPlaceholder />} />
         </Route>
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
