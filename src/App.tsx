@@ -25,12 +25,12 @@ import OrdersList from './pages/admin/OrdersList';
 // Main Layout Wrapper
 const MainLayout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-cyber-black text-cyber-light flex flex-col font-cyber relative">
+    <div className="min-h-screen street-app text-cyber-light flex flex-col font-cyber relative">
       {/* CRT Scanline Overlay globally */}
       <div className="fixed inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] z-50" />
       
       {/* Grid pattern background */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(18,16,16,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(18,16,16,0.1)_1px,transparent_1px)] bg-[length:24px_24px] pointer-events-none" />
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.055)_1px,transparent_1px)] bg-[length:28px_28px] pointer-events-none" />
 
       <Navbar />
       
@@ -41,7 +41,7 @@ const MainLayout: React.FC = () => {
       <CartDrawer />
 
       {/* Cyberpunk Footer bar */}
-      <footer className="border-t border-cyber-gray bg-cyber-black/75 py-4 z-10 select-none">
+      <footer className="border-t border-cyber-cyan/20 bg-cyber-black/80 backdrop-blur-md py-4 z-10 select-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2 font-mono text-[9px] text-cyber-light/30 uppercase tracking-widest">
           <div>
             NODO CENTRAL_ // ESTABLECIDO

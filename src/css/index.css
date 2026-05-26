@@ -5,6 +5,10 @@
 @layer base {
   body {
     @apply bg-cyber-black text-cyber-light font-cyber selection:bg-cyber-pink selection:text-white antialiased overflow-x-hidden;
+    background-image: linear-gradient(rgba(5, 5, 8, 0.64), rgba(5, 5, 8, 0.88)), url("/assets/street-alley-neon.svg");
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
   }
 }
 
@@ -148,18 +152,25 @@
 
   /* Tarjeta Cyberpunk Premium */
   .cyber-card {
-    @apply bg-cyber-card border border-cyber-gray/60 p-6 relative transition-all duration-300 overflow-hidden;
+    @apply bg-cyber-card/80 border border-cyber-cyan/20 p-6 relative transition-all duration-300 overflow-hidden backdrop-blur-md;
+    box-shadow:
+      0 18px 42px rgba(0, 0, 0, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 0 18px rgba(0, 240, 255, 0.08);
   }
   .cyber-card::before {
     content: "";
-    @apply absolute top-0 left-0 w-1 h-0 bg-cyber-cyan transition-all duration-300;
+    @apply absolute top-0 left-0 w-1 h-0 bg-cyber-yellow transition-all duration-300;
   }
   .cyber-card:hover::before {
     @apply h-full;
   }
   .cyber-card:hover {
-    @apply border-cyber-cyan/40 -translate-y-1;
-    box-shadow: 0 10px 25px -10px rgba(0, 240, 255, 0.15);
+    @apply border-cyber-cyan/50 -translate-y-1;
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, 0.42),
+      0 0 24px rgba(0, 240, 255, 0.16),
+      0 0 30px rgba(255, 0, 127, 0.09);
   }
 
   /* Grid Urbano Cyber */
@@ -184,6 +195,149 @@
     z-index: 10;
     background-size: 100% 4px, 6px 100%;
     pointer-events: none;
+  }
+
+  .street-app {
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(255, 230, 0, 0.14), transparent 26%),
+      radial-gradient(circle at 86% 22%, rgba(0, 240, 255, 0.16), transparent 28%),
+      linear-gradient(rgba(5, 5, 8, 0.54), rgba(5, 5, 8, 0.9)),
+      url("/assets/street-alley-neon.svg");
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
+  }
+
+  .street-hero {
+    background-image:
+      linear-gradient(90deg, rgba(5, 5, 8, 0.92), rgba(5, 5, 8, 0.5) 48%, rgba(5, 5, 8, 0.86)),
+      url("/assets/street-alley-neon.svg");
+    background-position: center;
+    background-size: cover;
+  }
+
+  .urban-panel {
+    @apply relative overflow-hidden border border-cyber-cyan/25 bg-cyber-card/80 backdrop-blur-md transition-all duration-500;
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 24px rgba(0, 240, 255, 0.08);
+  }
+
+  .urban-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(120deg, transparent 0 35%, rgba(0, 240, 255, 0.14) 44%, transparent 54%),
+      radial-gradient(circle at 18% 12%, rgba(255, 230, 0, 0.16), transparent 20%),
+      radial-gradient(circle at 86% 78%, rgba(255, 0, 127, 0.14), transparent 22%);
+    transform: translateX(-24%);
+    opacity: 0.58;
+    transition: transform 700ms ease, opacity 700ms ease;
+  }
+
+  .urban-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .urban-panel::after {
+    content: "";
+    position: absolute;
+    right: 12%;
+    top: 18%;
+    width: 42px;
+    height: 10px;
+    border: 1px solid rgba(0, 240, 255, 0.72);
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.14), rgba(255, 0, 127, 0.2));
+    box-shadow:
+      -86px 58px 0 -2px rgba(255, 0, 127, 0.34),
+      74px 116px 0 -3px rgba(57, 255, 20, 0.28),
+      -132px 154px 0 -4px rgba(255, 230, 0, 0.26),
+      0 0 18px rgba(0, 240, 255, 0.25);
+    pointer-events: none;
+    opacity: 0.42;
+    animation: mini-capsule-float 7s ease-in-out infinite;
+  }
+
+  .urban-panel:hover {
+    @apply border-cyber-cyan/60 -translate-y-1;
+    box-shadow:
+      0 22px 55px rgba(0, 0, 0, 0.45),
+      0 0 28px rgba(0, 240, 255, 0.16),
+      0 0 34px rgba(255, 0, 127, 0.1);
+  }
+
+  .urban-panel:hover::before {
+    transform: translateX(16%);
+    opacity: 0.82;
+  }
+
+  .capsule-field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .capsule-field span {
+    position: absolute;
+    width: 52px;
+    height: 12px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: linear-gradient(90deg, currentColor, transparent);
+    opacity: 0.38;
+    filter: drop-shadow(0 0 10px currentColor);
+    animation: mini-capsule-drift 12s ease-in-out infinite;
+  }
+
+  .capsule-field span:nth-child(1) {
+    color: #00f0ff;
+    left: 8%;
+    top: 18%;
+  }
+
+  .capsule-field span:nth-child(2) {
+    color: #ff007f;
+    right: 14%;
+    top: 28%;
+    animation-delay: -3s;
+  }
+
+  .capsule-field span:nth-child(3) {
+    color: #ffe600;
+    left: 18%;
+    bottom: 24%;
+    animation-delay: -6s;
+  }
+
+  .capsule-field span:nth-child(4) {
+    color: #39ff14;
+    right: 26%;
+    bottom: 18%;
+    animation-delay: -9s;
+  }
+
+  @keyframes mini-capsule-float {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) rotate(-8deg);
+    }
+    50% {
+      transform: translate3d(16px, -18px, 0) rotate(8deg);
+    }
+  }
+
+  @keyframes mini-capsule-drift {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) rotate(-12deg) scale(1);
+    }
+    50% {
+      transform: translate3d(34px, -26px, 0) rotate(10deg) scale(1.08);
+    }
   }
 }
 

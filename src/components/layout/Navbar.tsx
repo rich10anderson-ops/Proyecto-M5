@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
   const isAdmin = profile?.role === 'admin';
 
   return (
-    <nav className="sticky top-0 z-40 bg-cyber-black/85 backdrop-blur-md border-b border-cyber-gray select-none">
+    <nav className="sticky top-0 z-40 bg-cyber-black/72 backdrop-blur-xl border-b border-cyber-cyan/20 select-none shadow-[0_0_28px_rgba(0,240,255,0.1)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
@@ -38,10 +38,14 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center">
             <Link
               to="/"
-              className="font-display font-black uppercase text-base sm:text-lg tracking-widest text-white group flex items-center gap-1.5"
+              className="font-display font-black uppercase text-base sm:text-lg tracking-widest text-white group flex items-center gap-2"
             >
-              <span className="w-2.5 h-2.5 bg-cyber-cyan group-hover:animate-ping rounded-none" />
-              NEON <span className="text-cyber-cyan neon-text-cyan">TECH</span>
+              <img
+                src="/assets/charry-street-logo.svg"
+                alt="La Tienda de Charry"
+                className="h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(0,240,255,0.55)] transition-transform duration-300 group-hover:scale-110"
+              />
+              CHARRY <span className="text-cyber-cyan neon-text-cyan">STREET</span>
             </Link>
           </div>
 

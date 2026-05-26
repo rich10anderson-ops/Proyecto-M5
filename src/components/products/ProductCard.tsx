@@ -32,12 +32,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="relative group bg-cyber-card border border-cyber-gray/40 hover:border-cyber-cyan/40 transition-all duration-500 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] select-none">
+    <div className="urban-panel relative group flex flex-col justify-between select-none">
       {/* Decorative top glow border on hover */}
       <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-cyber-cyan via-cyber-pink to-cyber-lime transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"></div>
 
       {/* Cyber Tag Badge */}
-      <div className="absolute top-3 left-3 bg-cyber-black/80 border border-cyber-gray text-cyber-light/80 px-2 py-0.5 text-[8px] font-mono uppercase tracking-widest z-10">
+      <div className="absolute top-3 left-3 bg-cyber-black/80 border border-cyber-cyan/30 text-cyber-light/80 px-2 py-0.5 text-[8px] font-mono uppercase tracking-widest z-10 rounded-full">
         {category}
       </div>
 

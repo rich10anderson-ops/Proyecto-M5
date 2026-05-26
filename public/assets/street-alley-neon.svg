@@ -1,0 +1,82 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11182f"/>
+      <stop offset="0.45" stop-color="#080812"/>
+      <stop offset="1" stop-color="#030306"/>
+    </linearGradient>
+    <linearGradient id="leftWall" x1="120" y1="60" x2="730" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#273049"/>
+      <stop offset="0.55" stop-color="#101522"/>
+      <stop offset="1" stop-color="#050507"/>
+    </linearGradient>
+    <linearGradient id="rightWall" x1="1800" y1="40" x2="1150" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#312347"/>
+      <stop offset="0.55" stop-color="#15111f"/>
+      <stop offset="1" stop-color="#050507"/>
+    </linearGradient>
+    <radialGradient id="cyanGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 430) rotate(90) scale(620 840)">
+      <stop stop-color="#00f0ff" stop-opacity="0.55"/>
+      <stop offset="0.38" stop-color="#00f0ff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#00f0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pinkGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(520 450) rotate(65) scale(520 640)">
+      <stop stop-color="#ff007f" stop-opacity="0.5"/>
+      <stop offset="0.45" stop-color="#ff007f" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#ff007f" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="brick" width="120" height="58" patternUnits="userSpaceOnUse">
+      <path d="M0 56H120M0 0H120M60 0V28M0 28H120M0 28V56M120 28V56" stroke="#ffffff" stroke-opacity="0.035" stroke-width="2"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#cyanGlow)"/>
+  <rect width="1920" height="1080" fill="url(#pinkGlow)"/>
+
+  <path d="M0 0H770L680 1080H0V0Z" fill="url(#leftWall)"/>
+  <path d="M1920 0H1150L1240 1080H1920V0Z" fill="url(#rightWall)"/>
+  <path d="M690 300H1230L1115 1080H805L690 300Z" fill="#090910"/>
+  <path d="M800 1080L920 330H1000L1120 1080H800Z" fill="#050509"/>
+  <path d="M690 300H1230" stroke="#00f0ff" stroke-opacity="0.45" stroke-width="4"/>
+
+  <path d="M0 0H770L680 1080H0V0Z" fill="url(#brick)"/>
+  <path d="M1920 0H1150L1240 1080H1920V0Z" fill="url(#brick)" opacity="0.9"/>
+
+  <g filter="url(#softGlow)">
+    <path d="M165 190L300 132L435 190V352C435 412 379 465 300 498C221 465 165 412 165 352V190Z" fill="#061117" stroke="#00f0ff" stroke-width="6"/>
+    <path d="M230 240H370M250 298H350M268 356H332" stroke="#ff007f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M1470 168L1604 110L1738 168V332C1738 392 1682 445 1604 478C1526 445 1470 392 1470 332V168Z" fill="#160716" stroke="#ff007f" stroke-width="6"/>
+    <path d="M1538 232L1604 188L1670 232M1538 304L1604 260L1670 304" stroke="#39ff14" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M560 245L660 204L760 245V370C760 414 718 454 660 478C602 454 560 414 560 370V245Z" fill="#111018" stroke="#ffe600" stroke-width="5"/>
+    <path d="M610 286H710M630 338H690" stroke="#00f0ff" stroke-width="11" stroke-linecap="round"/>
+    <path d="M1180 238L1288 190L1396 238V370C1396 418 1350 460 1288 486C1226 460 1180 418 1180 370V238Z" fill="#07110c" stroke="#39ff14" stroke-width="5"/>
+    <circle cx="1288" cy="318" r="54" stroke="#00f0ff" stroke-width="12"/>
+    <path d="M1252 318H1324" stroke="#ff007f" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <g opacity="0.9" filter="url(#softGlow)">
+    <path d="M80 610C180 540 300 550 412 605" stroke="#ff007f" stroke-width="18" stroke-linecap="round"/>
+    <path d="M96 690C232 620 365 636 480 718" stroke="#00f0ff" stroke-width="14" stroke-linecap="round"/>
+    <path d="M1440 610C1540 544 1680 550 1810 630" stroke="#00f0ff" stroke-width="18" stroke-linecap="round"/>
+    <path d="M1375 722C1530 650 1690 666 1836 760" stroke="#ffe600" stroke-width="14" stroke-linecap="round"/>
+    <path d="M510 700L630 590L750 700" stroke="#39ff14" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1190 704L1320 586L1450 704" stroke="#ff007f" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g opacity="0.32">
+    <path d="M780 1080L890 510H1030L1140 1080" stroke="#00f0ff" stroke-opacity="0.28" stroke-width="2"/>
+    <path d="M330 1080L740 370M1590 1080L1180 370" stroke="#ffffff" stroke-opacity="0.06" stroke-width="3"/>
+    <path d="M0 850H720M1200 850H1920" stroke="#ff007f" stroke-opacity="0.18" stroke-width="4"/>
+  </g>
+
+  <rect y="760" width="1920" height="320" fill="url(#sky)" opacity="0.55"/>
+  <rect width="1920" height="1080" fill="#020204" opacity="0.22"/>
+</svg>

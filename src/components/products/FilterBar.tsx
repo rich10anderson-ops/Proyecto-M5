@@ -26,7 +26,7 @@ const FilterBar: React.FC = () => {
   }, [debouncedSearchTerm]);
 
   return (
-    <div className="bg-cyber-card border border-cyber-gray/40 p-4 md:p-6 mb-8 relative select-none">
+    <div className="urban-panel p-4 md:p-6 mb-8 select-none">
       {/* Visual cyber layout borders */}
       <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyber-cyan"></div>
       <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyber-cyan"></div>
@@ -57,7 +57,7 @@ const FilterBar: React.FC = () => {
               <button
                 key={cat.name}
                 onClick={() => changeCategory(cat.name)}
-                className={`flex items-center gap-2 px-4 py-2.5 border text-[10px] font-display font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap cursor-pointer rounded-none outline-none ${
+                className={`flex items-center gap-2 px-4 py-2.5 border text-[10px] font-display font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap cursor-pointer rounded-full outline-none ${
                   isSelected
                     ? 'border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 shadow-neon-cyan'
                     : 'border-cyber-gray text-cyber-light/60 hover:text-white hover:border-cyber-light'

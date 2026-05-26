@@ -1,0 +1,29 @@
+<svg width="720" height="720" viewBox="0 0 720 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="plate" x1="96" y1="64" x2="624" y2="656" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111a2e"/>
+      <stop offset="0.5" stop-color="#07080f"/>
+      <stop offset="1" stop-color="#19061a"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="146" y1="128" x2="580" y2="594" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0ff"/>
+      <stop offset="0.48" stop-color="#ff007f"/>
+      <stop offset="1" stop-color="#39ff14"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M360 48L598 146V414C598 528 508 620 360 672C212 620 122 528 122 414V146L360 48Z" fill="url(#plate)" stroke="url(#neon)" stroke-width="18" filter="url(#glow)"/>
+  <path d="M188 198L360 128L532 198V402C532 486 466 554 360 596C254 554 188 486 188 402V198Z" stroke="#ffffff" stroke-opacity="0.22" stroke-width="6"/>
+  <path d="M224 398C258 316 304 268 360 268C416 268 462 316 496 398" stroke="#00f0ff" stroke-width="30" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M260 394C286 344 318 318 360 318C402 318 434 344 460 394" stroke="#ff007f" stroke-width="20" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M244 462H476" stroke="#39ff14" stroke-width="24" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M286 212H434M308 518H412" stroke="#ffe600" stroke-width="16" stroke-linecap="round" filter="url(#glow)"/>
+  <text x="360" y="251" text-anchor="middle" fill="#ffffff" font-family="Orbitron, Arial, sans-serif" font-size="54" font-weight="900" letter-spacing="8">CHARRY</text>
+  <text x="360" y="558" text-anchor="middle" fill="#00f0ff" font-family="Orbitron, Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="10">STREET</text>
+</svg>

@@ -3,7 +3,7 @@ import { useProducts } from '../../hooks/useProducts';
 import FilterBar from '../../components/products/FilterBar';
 import ProductCard from '../../components/products/ProductCard';
 import Spinner from '../../components/common/Spinner';
-import { Cpu, ShoppingBag, Eye, Heart, HelpCircle, Layers, Sparkles, Share2, Copy, Check } from 'lucide-react';
+import { Cpu, Sparkles, Share2, Copy, Check } from 'lucide-react';
 
 export const Home: React.FC = () => {
   const { products, loading, error, hasMore, loadNextPage, totalProducts } = useProducts();
@@ -17,27 +17,39 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cyber-black pb-24 cyber-grid select-none relative">
+    <div className="min-h-screen pb-24 select-none relative">
       {/* CRT Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] z-10" />
 
       {/* HERO SECTION */}
-      <header className="relative overflow-hidden bg-cyber-dark border-b border-cyber-gray py-16 md:py-24 px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+      <header className="street-hero urban-panel relative min-h-[72vh] overflow-hidden border-cyber-cyan/30 py-14 md:py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
+        <div className="capsule-field">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
         {/* Background glow effects */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyber-cyan/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyber-pink/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyber-yellow/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyber-pink/20 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-3xl mx-auto space-y-6 z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink font-mono text-[9px] uppercase tracking-widest animate-pulse">
-            <Sparkles size={10} /> Dese el gusto de ser bien atendido v3.0
+        <div className="max-w-4xl mx-auto space-y-6 z-10">
+          <img
+            src="/assets/charry-street-logo.svg"
+            alt="Logo La Tienda de Charry"
+            className="mx-auto h-28 w-28 md:h-36 md:w-36 object-contain drop-shadow-[0_0_24px_rgba(0,240,255,0.5)]"
+          />
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyber-yellow/10 border border-cyber-yellow/40 text-cyber-yellow font-mono text-[9px] uppercase tracking-widest animate-pulse">
+            <Sparkles size={10} /> Callejon neon // moda urbana seleccionada
           </div>
           
           <h1 className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase text-white tracking-widest leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-            LA TIENDA <span className="text-cyber-cyan neon-text-cyan"> DE CHARRY</span>
+            STREET <span className="text-cyber-cyan neon-text-cyan">CHARRY</span>
           </h1>
           
           <p className="font-mono text-xs md:text-sm text-cyber-light/60 uppercase tracking-widest max-w-xl mx-auto leading-relaxed">
-            Equipamiento urbano y tecnología futurista de alto impacto. Diseñado para resistir la ciudad. Destaca con resplandores neón.
+            Equipamiento urbano, tecnologia futurista y actitud street con acentos neon, escudos graficos y energia de ciudad.
           </p>
 
           <div className="pt-4 flex items-center justify-center gap-4 relative">
@@ -69,7 +81,7 @@ export const Home: React.FC = () => {
                     onClick={() => setShareOpen(false)}
                   />
                   {/* Dropdown content */}
-                  <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-52 bg-cyber-card border-2 border-cyber-pink p-3 space-y-2 z-45 shadow-[0_0_25px_rgba(255,0,127,0.35)] animate-slide-in font-mono text-[10px] text-left rounded-none">
+                  <div className="urban-panel absolute left-1/2 -translate-x-1/2 mt-3 w-52 border-2 border-cyber-pink p-3 space-y-2 z-45 shadow-[0_0_25px_rgba(255,0,127,0.35)] animate-slide-in font-mono text-[10px] text-left rounded-none">
                     <div className="text-[8px] text-cyber-pink font-bold border-b border-cyber-pink/20 pb-1.5 tracking-widest uppercase">
                       COMPARTIR MÓDULO_
                     </div>
@@ -185,7 +197,7 @@ export const Home: React.FC = () => {
         <FilterBar />
 
         {/* Catalog Metadata Info */}
-        <div className="flex justify-between items-center mb-6 font-mono text-[10px] text-cyber-light/45 uppercase tracking-widest border-b border-cyber-gray/30 pb-3">
+        <div className="urban-panel flex justify-between items-center mb-6 font-mono text-[10px] text-cyber-light/60 uppercase tracking-widest p-3">
           <span>CATÁLOGO PRINCIPAL // REGISTRO</span>
           <span>
             {loading && products.length === 0 ? 'CONECTANDO...' : `${products.length} / ${totalProducts} PRODUCTOS`}
@@ -194,14 +206,14 @@ export const Home: React.FC = () => {
 
         {/* Errors Block */}
         {error && (
-          <div className="bg-cyber-card border border-cyber-pink/55 p-4 text-center max-w-md mx-auto my-12 space-y-4">
+          <div className="urban-panel border-cyber-pink/55 p-4 text-center max-w-md mx-auto my-12 space-y-4">
             <div className="text-cyber-pink text-xs uppercase font-mono">{error}</div>
           </div>
         )}
 
         {/* Products Grid */}
         {products.length === 0 && !loading ? (
-          <div className="bg-cyber-card border border-cyber-gray p-12 text-center max-w-md mx-auto my-12 space-y-4">
+          <div className="urban-panel p-12 text-center max-w-md mx-auto my-12 space-y-4">
             <Cpu className="text-cyber-light/30 mx-auto animate-spin" size={30} />
             <h3 className="font-display font-black text-sm uppercase text-white tracking-widest">
               SIN RESULTADOS DE BÚSQUEDA
@@ -219,7 +231,7 @@ export const Home: React.FC = () => {
             {/* Skeletons on initial loading */}
             {loading && products.length === 0 && (
               Array.from({ length: 8 }).map((_, idx) => (
-                <div key={idx} className="bg-cyber-card border border-cyber-gray/30 p-4 space-y-4 animate-pulse">
+                <div key={idx} className="urban-panel border-cyber-gray/30 p-4 space-y-4 animate-pulse">
                   <div className="aspect-square bg-cyber-gray/50 w-full rounded-none" />
                   <div className="space-y-2">
                     <div className="h-3 bg-cyber-gray/50 w-1/3 rounded-none" />
