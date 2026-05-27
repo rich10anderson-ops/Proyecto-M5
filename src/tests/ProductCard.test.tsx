@@ -61,7 +61,7 @@ describe('ProductCard Component Tests', () => {
     const outOfStockProduct = { ...MOCK_PRODUCT, stock: 0 };
     renderWithRouter(<ProductCard product={outOfStockProduct} />);
 
-    expect(screen.getByText('OUT OF STOCK')).toBeInTheDocument();
+    expect(screen.getAllByText('AGOTADO')[0]).toBeInTheDocument();
     const btn = screen.getByRole('button', { name: /AGOTADO/i });
     expect(btn).toBeDisabled();
   });

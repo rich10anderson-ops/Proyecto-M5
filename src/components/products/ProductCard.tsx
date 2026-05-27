@@ -44,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Stock alert badge */}
       {isOutOfStock ? (
         <div className="absolute top-3 right-3 bg-cyber-pink text-cyber-black px-2 py-0.5 text-[8px] font-display font-black uppercase tracking-widest z-10 flex items-center gap-1 shadow-neon-pink">
-          <ShieldAlert size={10} /> OUT OF STOCK
+          <ShieldAlert size={10} /> AGOTADO
         </div>
       ) : stock <= 5 ? (
         <div className="absolute top-3 right-3 bg-cyber-yellow text-cyber-black px-2 py-0.5 text-[8px] font-display font-black uppercase tracking-widest z-10">

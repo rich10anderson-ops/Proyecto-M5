@@ -674,6 +674,23 @@ export const updateOrderStatus = async (orderId: string, status: OrderStatus): P
   try {
     const docRef = doc(db, 'orders', orderId);
     await updateDoc(docRef, { status });
+
+    // Deduzca del stock si la orden está completada (vendida)
+    if (status === 'completed') {
+      const orderSnap = await getDoc(docRef);
+      if (orderSnap.exists()) {
+        const orderData = orderSnap.data() as Order;
+        if (orderData.items) {
+          for (const item of orderData.items) {
+            const product = await getProductById(item.product.id);
+            if (product) {
+              const newStock = Math.max(0, product.stock - item.quantity);
+              await updateProduct(item.product.id, { stock: newStock });
+            }
+          }
+        }
+      }
+    }
   } catch (error) {
     console.warn(`updateOrderStatus (${orderId}) - Actualizando localmente:`, error);
     const orders = getLocalOrders();
@@ -681,6 +698,20 @@ export const updateOrderStatus = async (orderId: string, status: OrderStatus): P
     if (index !== -1) {
       orders[index].status = status;
       saveLocalOrders(orders);
+
+      // Fallback local para actualización de stock fuera de línea
+      if (status === 'completed') {
+        const orderData = orders[index];
+        if (orderData.items) {
+          for (const item of orderData.items) {
+            const product = await getProductById(item.product.id);
+            if (product) {
+              const newStock = Math.max(0, product.stock - item.quantity);
+              await updateProduct(item.product.id, { stock: newStock });
+            }
+          }
+        }
+      }
     }
   }
 };

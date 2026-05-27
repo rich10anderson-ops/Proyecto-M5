@@ -133,7 +133,7 @@ export const ProductDetail: React.FC = () => {
 
                 {isOutOfStock ? (
                   <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 border border-cyber-pink text-cyber-pink bg-cyber-pink/10 shadow-neon-pink">
-                    SIN STOCK
+                    AGOTADO
                   </span>
                 ) : stock <= 5 ? (
                   <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 border border-cyber-yellow text-cyber-yellow bg-cyber-yellow/10">
@@ -214,7 +214,7 @@ export const ProductDetail: React.FC = () => {
                 }`}
               >
                 <ShoppingCart size={16} className={adding ? 'animate-bounce' : ''} />
-                {isOutOfStock ? 'SIN INVENTARIO' : adding ? 'SINCRONIZANDO...' : 'CARGAR A ORDEN'}
+                {isOutOfStock ? 'AGOTADO' : adding ? 'SINCRONIZANDO...' : 'CARGAR A ORDEN'}
               </button>
 
               {/* Guarantees */}
